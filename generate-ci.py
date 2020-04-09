@@ -34,8 +34,8 @@ DISTS = {
 }
 
 COMMON = {
+    "os": "linux",
     "dist": "bionic",
-    "sudo": "required",
     "language": "generic",
     "install": "git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder",
     "script": "~/qubes-builder/scripts/travis-build"
