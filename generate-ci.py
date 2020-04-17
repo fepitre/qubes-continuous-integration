@@ -10,26 +10,33 @@ from ruamel.yaml import YAML
 DISTS = {
     "4.0": {
         "dom0": 'fc25',
-        "vm": [
-            "fc30",
-            "fc31",
-            "centos7",
-            "stretch",
-            "buster"
-        ]
+        "vms": {
+            "rpm": [
+                "fc30",
+                "fc31"
+            ],
+            "deb": [
+                "stretch",
+                "buster"
+            ]
+        }
     },
     "4.1": {
         "dom0": 'fc31',
-        "vm": [
-            "fc30",
-            "fc31",
-            "fc32",
-            "centos7",
-            "centos8",
-            "stretch",
-            "buster",
-            "bullseye"
-        ]
+        "vms": {
+            "rpm": [
+                "fc30",
+                "fc31",
+                "fc32",
+                "centos7",
+                "centos8"
+            ],
+            "deb": [
+                "stretch",
+                "buster",
+                "bullseye"
+            ]
+        }
     }
 }
 
@@ -53,6 +60,10 @@ BRANCHES = {
 
 ENVS = {
     'env': []
+}
+
+VMS = {
+    'import': []
 }
 
 
@@ -95,14 +106,14 @@ class QubesCI:
             env = ' '.join(env)
         return [env]
 
-    def generate_vms(self, to_string=True):
+    def generate_vms(self, distro, to_string=True):
         default_env = [
             'USE_QUBES_REPO_VERSION=%s' % self.qubes_release,
             'USE_QUBES_REPO_TESTING=1'
         ]
         envs = []
-        vms = DISTS[self.qubes_release]['vm']
-        for vm in vms:
+        vms = DISTS[self.qubes_release]['vms']
+        for vm in vms[distro]:
             env = ['DISTS_VM=%s' % vm] + default_env
             if to_string:
                 env = ' '.join(env)
@@ -127,25 +138,36 @@ class QubesCI:
             **COMMON,
             **BRANCHES
         }
-        travis_path = 'R%s/travis-base-r%s.yml' % (self.qubes_release,
-                                                   self.qubes_release)
+        travis_path = 'R{release}/travis-base-r{release}.yml'.format(
+            release=self.qubes_release)
         self.write_yml(base, travis_path)
 
     def write_dom0(self):
         envs = ENVS
         envs['env'] = self.generate_dom0()
-        travis_path = 'R%s/travis-dom0-r%s.yml' % (self.qubes_release,
-                                                   self.qubes_release)
+        travis_path = 'R{release}/travis-dom0-r{release}.yml'.format(
+            release=self.qubes_release)
 
         self.write_yml(envs, travis_path)
 
     def write_vms(self):
-        envs = ENVS
-        envs['env'] = self.generate_vms()
-        travis_path = 'R%s/travis-vms-r%s.yml' % (self.qubes_release,
-                                                  self.qubes_release)
+        vms = VMS
+        for distro in ['rpm', 'deb']:
+            envs = ENVS
+            envs['env'] = self.generate_vms(distro)
+            travis_path = 'R{release}/travis-vms-{distro}-r{release}.yml'.format(
+                release=self.qubes_release, distro=distro)
+            self.write_yml(envs, travis_path)
 
-        self.write_yml(envs, travis_path)
+            vms['import'].append(
+                {
+                    'source': 'QubesOS/qubes-continuous-integration:%s' % travis_path
+                }
+            )
+
+        travis_path_all = 'R{release}/travis-vms-r{release}.yml'.format(
+            release=self.qubes_release)
+        self.write_yml(vms, travis_path_all)
 
     def write_all(self):
         self.write_base()
