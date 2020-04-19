@@ -66,6 +66,16 @@ VMS = {
     'import': []
 }
 
+FLAVORS = {
+    'rpm': [
+        "minimal",
+        "xfce"
+    ],
+    'deb': [
+        "minimal"
+    ]
+}
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -106,7 +116,7 @@ class QubesCI:
             env = ' '.join(env)
         return [env]
 
-    def generate_vms(self, distro, to_string=True):
+    def generate_vms(self, distro, to_string=True, only_flavors=False):
         default_env = [
             'USE_QUBES_REPO_VERSION=%s' % self.qubes_release,
             'USE_QUBES_REPO_TESTING=1'
@@ -114,10 +124,17 @@ class QubesCI:
         envs = []
         vms = DISTS[self.qubes_release]['vms']
         for vm in vms[distro]:
-            env = ['DISTS_VM=%s' % vm] + default_env
-            if to_string:
-                env = ' '.join(env)
-            envs.append(env)
+            if only_flavors:
+                for flavor in FLAVORS[distro]:
+                    env = ['DISTS_VM=%s+%s' % (vm, flavor)] + default_env
+                    if to_string:
+                        env = ' '.join(env)
+                    envs.append(env)
+            else:
+                env = ['DISTS_VM=%s' % vm] + default_env
+                if to_string:
+                    env = ' '.join(env)
+                envs.append(env)
 
         return envs
 
@@ -133,7 +150,6 @@ class QubesCI:
             print("Cannot write %s: %s" % (path, str(e)))
 
     def write_base(self):
-
         base = {
             **COMMON,
             **BRANCHES
@@ -150,15 +166,11 @@ class QubesCI:
 
         self.write_yml(envs, travis_path)
 
-    def write_vms(self):
+    def write_include_vms(self):
         vms = VMS
         for distro in ['rpm', 'deb']:
-            envs = ENVS
-            envs['env'] = self.generate_vms(distro)
             travis_path = 'R{release}/travis-vms-{distro}-r{release}.yml'.format(
                 release=self.qubes_release, distro=distro)
-            self.write_yml(envs, travis_path)
-
             vms['import'].append(
                 {
                     'source': 'QubesOS/qubes-continuous-integration:%s' % travis_path
@@ -169,10 +181,25 @@ class QubesCI:
             release=self.qubes_release)
         self.write_yml(vms, travis_path_all)
 
+    def write_vms(self, only_flavors=False):
+        for distro in ['rpm', 'deb']:
+            envs = ENVS
+            envs['env'] = self.generate_vms(distro=distro, only_flavors=only_flavors)
+            if envs['env']:
+                if only_flavors:
+                    travis_path = 'R{release}/travis-vms-{distro}-flavors-r{release}.yml'
+                else:
+                    travis_path = 'R{release}/travis-vms-{distro}-r{release}.yml'
+
+                travis_path = travis_path.format(release=self.qubes_release, distro=distro)
+                self.write_yml(envs, travis_path)
+
     def write_all(self):
         self.write_base()
         self.write_dom0()
         self.write_vms()
+        self.write_vms(only_flavors=True)
+        self.write_include_vms()
 
 
 def main():
