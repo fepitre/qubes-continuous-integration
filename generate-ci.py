@@ -45,7 +45,9 @@ COMMON = {
     "dist": "bionic",
     "language": "generic",
     "install": "git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder",
-    "script": "~/qubes-builder/scripts/travis-build"
+    "script": [
+        "~/qubes-builder/scripts/travis-build"
+    ]
 }
 
 # don't build tags which are meant for code signing only
