@@ -59,7 +59,10 @@ BRANCHES = {
 }
 
 ENVS = {
-    'env': []
+    'env': {
+        'matrix': []
+    }
+
 }
 
 VMS = {
@@ -160,7 +163,7 @@ class QubesCI:
 
     def write_dom0(self):
         envs = ENVS
-        envs['env'] = self.generate_dom0()
+        envs['env']['matrix'] = self.generate_dom0()
         travis_path = 'R{release}/travis-dom0-r{release}.yml'.format(
             release=self.qubes_release)
 
@@ -184,14 +187,16 @@ class QubesCI:
     def write_vms(self, only_flavors=False):
         for distro in ['rpm', 'deb']:
             envs = ENVS
-            envs['env'] = self.generate_vms(distro=distro, only_flavors=only_flavors)
-            if envs['env']:
+            envs['env']['matrix'] = self.generate_vms(distro=distro,
+                                            only_flavors=only_flavors)
+            if envs['env']['matrix']:
                 if only_flavors:
                     travis_path = 'R{release}/travis-vms-{distro}-flavors-r{release}.yml'
                 else:
                     travis_path = 'R{release}/travis-vms-{distro}-r{release}.yml'
 
-                travis_path = travis_path.format(release=self.qubes_release, distro=distro)
+                travis_path = travis_path.format(release=self.qubes_release,
+                                                 distro=distro)
                 self.write_yml(envs, travis_path)
 
     def write_all(self):
