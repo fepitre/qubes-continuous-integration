@@ -17,7 +17,8 @@ DISTS = {
             ],
             "deb": [
                 "stretch",
-                "buster"
+                "buster",
+                "bullseye"
             ]
         }
     },
@@ -49,7 +50,14 @@ COMMON = {
     ],
     "script": [
         "~/qubes-builder/scripts/travis-build"
-    ]
+    ],
+    "addons": {
+        "apt": {
+          "packages": [
+            "language-pack-en"
+          ]
+        }
+      }
 }
 
 # don't build tags which are meant for code signing only

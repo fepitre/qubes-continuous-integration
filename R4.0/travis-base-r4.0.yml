@@ -5,6 +5,10 @@ install:
   - git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder
 script:
   - ~/qubes-builder/scripts/travis-build
+addons:
+  apt:
+    packages:
+      - language-pack-en
 branches:
   except:
     - /.*_.*/
