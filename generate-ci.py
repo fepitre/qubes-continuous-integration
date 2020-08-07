@@ -52,7 +52,8 @@ COMMON = {
         "git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder"
     ],
     "script": [
-        "~/qubes-builder/scripts/travis-build"
+        "~/qubes-builder/scripts/travis-build",
+        "~/qubes-builder/scripts/travis-install"
     ],
     "addons": {
         "apt": {
