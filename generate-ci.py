@@ -29,7 +29,6 @@ DISTS = {
                 "fc30",
                 "fc31",
                 "fc32",
-                "centos7",
                 "centos8"
             ],
             "deb": [
