@@ -131,7 +131,7 @@ class QubesCI:
         if to_string:
             env = ' '.join(env)
             env_dist_tools = ' '.join(env_dist_tools)
-        return [env, env_dist_tools]
+        return [env]
 
     def generate_vms(self, distro, to_string=True, only_flavors=False):
         default_env = [
@@ -150,8 +150,8 @@ class QubesCI:
                             env = ' '.join(env)
                             env_dist_tools = ' '.join(env_dist_tools)
                         envs.append(env)
-                        if vm not in ("archlinux", "gentoo"):
-                            envs.append(env_dist_tools)
+                        # if vm not in ("archlinux", "gentoo"):
+                        #     envs.append(env_dist_tools)
             else:
                 env = ['DISTS_VM=%s' % vm] + default_env
                 env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
@@ -159,8 +159,8 @@ class QubesCI:
                     env = ' '.join(env)
                     env_dist_tools = ' '.join(env_dist_tools)
                 envs.append(env)
-                if vm not in ("archlinux", "gentoo"):
-                    envs.append(env_dist_tools)
+                # if vm not in ("archlinux", "gentoo"):
+                #     envs.append(env_dist_tools)
 
         return envs
 
