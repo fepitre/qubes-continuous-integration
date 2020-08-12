@@ -26,13 +26,11 @@ DISTS = {
         "dom0": 'fc32',
         "vms": {
             "rpm": [
-                "fc30",
                 "fc31",
                 "fc32",
                 "centos8"
             ],
             "deb": [
-                "stretch",
                 "buster",
                 "bullseye"
             ],
@@ -129,9 +127,11 @@ class QubesCI:
             'USE_QUBES_REPO_TESTING=1'
         ]
         env = ['DIST_DOM0=%s' % DISTS[self.qubes_release]['dom0']] + default_env
+        env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
         if to_string:
             env = ' '.join(env)
-        return [env]
+            env_dist_tools = ' '.join(env_dist_tools)
+        return [env, env_dist_tools]
 
     def generate_vms(self, distro, to_string=True, only_flavors=False):
         default_env = [
@@ -145,14 +145,22 @@ class QubesCI:
                 if distro in FLAVORS:
                     for flavor in FLAVORS[distro]:
                         env = ['DISTS_VM=%s+%s' % (vm, flavor)] + default_env
+                        env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
                         if to_string:
                             env = ' '.join(env)
+                            env_dist_tools = ' '.join(env_dist_tools)
                         envs.append(env)
+                        if vm not in ("archlinux", "gentoo"):
+                            envs.append(env_dist_tools)
             else:
                 env = ['DISTS_VM=%s' % vm] + default_env
+                env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
                 if to_string:
                     env = ' '.join(env)
+                    env_dist_tools = ' '.join(env_dist_tools)
                 envs.append(env)
+                if vm not in ("archlinux", "gentoo"):
+                    envs.append(env_dist_tools)
 
         return envs
 
@@ -160,6 +168,7 @@ class QubesCI:
     def write_yml(content, path):
         try:
             travis_yml = YAML()
+            travis_yml.width = 4096
             travis_yml.indent(sequence=4, offset=2)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, 'w') as yml_fd:
