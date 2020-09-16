@@ -1,3 +1,4 @@
-env:
-  matrix:
-    - DISTS_VM=archlinux USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
+jobs:
+  include:
+    - name: vm-archlinux
+      env: DISTS_VM=archlinux USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
