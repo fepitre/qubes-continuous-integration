@@ -71,9 +71,9 @@ BRANCHES = {
     }
 }
 
-ENVS = {
-    'env': {
-        'matrix': []
+JOBS = {
+    'jobs': {
+        'include': []
     }
 
 }
@@ -91,6 +91,7 @@ FLAVORS = {
         "minimal"
     ]
 }
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -131,14 +132,18 @@ class QubesCI:
         if to_string:
             env = ' '.join(env)
             env_dist_tools = ' '.join(env_dist_tools)
-        return [env]
+        job = {
+            "name": "dom0-%s" % DISTS[self.qubes_release]['dom0'],
+            "env": env
+        }
+        return [job]
 
     def generate_vms(self, distro, to_string=True, only_flavors=False):
         default_env = [
             'USE_QUBES_REPO_VERSION=%s' % self.qubes_release,
             'USE_QUBES_REPO_TESTING=1'
         ]
-        envs = []
+        jobs = []
         vms = DISTS[self.qubes_release]['vms']
         for vm in vms[distro]:
             if only_flavors:
@@ -149,20 +154,25 @@ class QubesCI:
                         if to_string:
                             env = ' '.join(env)
                             env_dist_tools = ' '.join(env_dist_tools)
-                        envs.append(env)
-                        # if vm not in ("archlinux", "gentoo"):
-                        #     envs.append(env_dist_tools)
+                        job = {
+                            "name": "vm-%s+%s" % (vm, flavor),
+                            "env": env
+                        }
+                        jobs.append(job)
+
             else:
                 env = ['DISTS_VM=%s' % vm] + default_env
                 env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
                 if to_string:
                     env = ' '.join(env)
                     env_dist_tools = ' '.join(env_dist_tools)
-                envs.append(env)
-                # if vm not in ("archlinux", "gentoo"):
-                #     envs.append(env_dist_tools)
+                job = {
+                    "name": "vm-%s" % vm,
+                    "env": env
+                }
+                jobs.append(job)
 
-        return envs
+        return jobs
 
     @staticmethod
     def write_yml(content, path):
@@ -186,12 +196,12 @@ class QubesCI:
         self.write_yml(base, travis_path)
 
     def write_dom0(self):
-        envs = ENVS
-        envs['env']['matrix'] = self.generate_dom0()
+        jobs = JOBS
+        jobs['jobs']['include'] = self.generate_dom0()
         travis_path = 'R{release}/travis-dom0-r{release}.yml'.format(
             release=self.qubes_release)
 
-        self.write_yml(envs, travis_path)
+        self.write_yml(jobs, travis_path)
 
     def write_include_vms(self):
         vms = VMS
@@ -219,10 +229,10 @@ class QubesCI:
 
     def write_vms(self, only_flavors=False):
         for distro in DISTS[self.qubes_release]['vms']:
-            envs = ENVS
-            envs['env']['matrix'] = self.generate_vms(distro=distro,
+            jobs = JOBS
+            jobs['jobs']['include'] = self.generate_vms(distro=distro,
                                             only_flavors=only_flavors)
-            if envs['env']['matrix']:
+            if jobs['jobs']['include']:
                 if only_flavors:
                     travis_path = 'R{release}/travis-vms-{distro}-flavors-r{release}.yml'
                 else:
@@ -230,7 +240,7 @@ class QubesCI:
 
                 travis_path = travis_path.format(release=self.qubes_release,
                                                  distro=distro)
-                self.write_yml(envs, travis_path)
+                self.write_yml(jobs, travis_path)
 
     def write_all(self):
         self.write_base()

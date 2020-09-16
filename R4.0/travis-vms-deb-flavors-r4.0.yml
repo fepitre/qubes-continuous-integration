@@ -1,5 +1,8 @@
-env:
-  matrix:
-    - DISTS_VM=stretch+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - DISTS_VM=buster+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - DISTS_VM=bullseye+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+jobs:
+  include:
+    - name: vm-stretch+minimal
+      env: DISTS_VM=stretch+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-buster+minimal
+      env: DISTS_VM=buster+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-bullseye+minimal
+      env: DISTS_VM=bullseye+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1

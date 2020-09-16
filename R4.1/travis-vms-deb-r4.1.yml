@@ -1,4 +1,6 @@
-env:
-  matrix:
-    - DISTS_VM=buster USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
-    - DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
+jobs:
+  include:
+    - name: vm-buster
+      env: DISTS_VM=buster USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
+    - name: vm-bullseye
+      env: DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
