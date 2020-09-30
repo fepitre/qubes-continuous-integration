@@ -167,8 +167,9 @@ class QubesCI:
                     env = ' '.join(env)
                     env_dist_tools = ' '.join(env_dist_tools)
                 job = {
+                    "stage": "test",
                     "name": "vm-%s" % vm,
-                    "env": env
+                    "env": env,
                 }
                 jobs.append(job)
 

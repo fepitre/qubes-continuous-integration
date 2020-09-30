@@ -1,6 +1,8 @@
 jobs:
   include:
-    - name: vm-fc30
+    - stage: test
+      name: vm-fc30
       env: DISTS_VM=fc30 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - name: vm-fc31
+    - stage: test
+      name: vm-fc31
       env: DISTS_VM=fc31 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
