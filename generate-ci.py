@@ -172,7 +172,13 @@ class QubesCI:
                     "env": env,
                 }
                 jobs.append(job)
-
+                if vm in ('stretch', 'buster', 'bullseye'):
+                    job_dist_tools = {
+                        "stage": "test",
+                        "name": "vm-%s-pbuilder" % vm,
+                        "env": env_dist_tools,
+                    }
+                    jobs.append(job_dist_tools)
         return jobs
 
     @staticmethod

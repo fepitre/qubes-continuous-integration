@@ -4,5 +4,11 @@ jobs:
       name: vm-buster
       env: DISTS_VM=buster USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
     - stage: test
+      name: vm-buster-pbuilder
+      env: DISTS_VM=buster USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1 USE_DIST_BUILD_TOOLS=1
+    - stage: test
       name: vm-bullseye
       env: DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1
+    - stage: test
+      name: vm-bullseye-pbuilder
+      env: DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1 USE_DIST_BUILD_TOOLS=1
