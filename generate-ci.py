@@ -154,6 +154,8 @@ class QubesCI:
                         if to_string:
                             env = ' '.join(env)
                             env_dist_tools = ' '.join(env_dist_tools)
+                        if vm in ('stretch', 'buster', 'bullseye'):
+                            env = env_dist_tools
                         job = {
                             "name": "vm-%s+%s" % (vm, flavor),
                             "env": env
@@ -166,19 +168,14 @@ class QubesCI:
                 if to_string:
                     env = ' '.join(env)
                     env_dist_tools = ' '.join(env_dist_tools)
+                if vm in ('stretch', 'buster', 'bullseye'):
+                    env = env_dist_tools
                 job = {
                     "stage": "test",
                     "name": "vm-%s" % vm,
                     "env": env,
                 }
                 jobs.append(job)
-                if vm in ('stretch', 'buster', 'bullseye'):
-                    job_dist_tools = {
-                        "stage": "test",
-                        "name": "vm-%s-pbuilder" % vm,
-                        "env": env_dist_tools,
-                    }
-                    jobs.append(job_dist_tools)
         return jobs
 
     @staticmethod
