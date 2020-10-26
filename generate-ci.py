@@ -50,7 +50,8 @@ COMMON = {
     ],
     "script": [
         "~/qubes-builder/scripts/travis-build",
-        "~/qubes-builder/scripts/travis-install"
+        "~/qubes-builder/scripts/travis-install",
+        "~/qubes-builder/scripts/travis-reprotest"
     ],
     "addons": {
         "apt": {
