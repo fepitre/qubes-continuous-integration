@@ -54,6 +54,11 @@ COMMON = {
                 "language-pack-en"
             ]
         }
+    },
+    "env": {
+        "global": [
+            "BACKEND_VMM=xen"
+        ]
     }
 }
 
