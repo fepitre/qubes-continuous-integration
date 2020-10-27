@@ -48,18 +48,25 @@ COMMON = {
     "install": [
         "git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder"
     ],
-    "script": [
+    "addons": {
+        "apt": {
+            "packages": [
+                "language-pack-en"
+            ]
+        }
+    }
+}
+
+SCRIPT = {
+    '4.0': [
+        "~/qubes-builder/scripts/travis-build",
+        "~/qubes-builder/scripts/travis-install",
+    ],
+    '4.1': [
         "~/qubes-builder/scripts/travis-build",
         "~/qubes-builder/scripts/travis-install",
         "~/qubes-builder/scripts/travis-reprotest"
     ],
-    "addons": {
-        "apt": {
-          "packages": [
-            "language-pack-en"
-          ]
-        }
-      }
 }
 
 # don't build tags which are meant for code signing only
@@ -192,10 +199,8 @@ class QubesCI:
             print("Cannot write %s: %s" % (path, str(e)))
 
     def write_base(self):
-        base = {
-            **COMMON,
-            **BRANCHES
-        }
+        base = {**COMMON, **BRANCHES,
+                "script": SCRIPT.get(self.qubes_release, [])}
         travis_path = 'R{release}/travis-base-r{release}.yml'.format(
             release=self.qubes_release)
         self.write_yml(base, travis_path)
@@ -221,7 +226,7 @@ class QubesCI:
 
         # We add an extra file for filling it manually
         travis_path = 'R{release}/travis-vms-{distro}-r{release}.yml'.format(
-                release=self.qubes_release, distro='extra')
+            release=self.qubes_release, distro='extra')
         vms['import'].append(
             {
                 'source': 'QubesOS/qubes-continuous-integration:%s' % travis_path
@@ -236,7 +241,7 @@ class QubesCI:
         for distro in DISTS[self.qubes_release]['vms']:
             jobs = JOBS
             jobs['jobs']['include'] = self.generate_vms(distro=distro,
-                                            only_flavors=only_flavors)
+                                                        only_flavors=only_flavors)
             if jobs['jobs']['include']:
                 if only_flavors:
                     travis_path = 'R{release}/travis-vms-{distro}-flavors-r{release}.yml'
