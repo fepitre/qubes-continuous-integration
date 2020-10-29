@@ -7,6 +7,9 @@ addons:
   apt:
     packages:
       - language-pack-en
+env:
+  global:
+    - BACKEND_VMM=xen
 branches:
   except:
     - /.*_.*/

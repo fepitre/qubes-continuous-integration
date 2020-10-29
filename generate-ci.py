@@ -12,8 +12,9 @@ DISTS = {
         "dom0": 'fc25',
         "vms": {
             "rpm": [
-                "fc30",
-                "fc31"
+                "fc31",
+                "fc32",
+                "centos8"
             ],
             "deb": [
                 "stretch",

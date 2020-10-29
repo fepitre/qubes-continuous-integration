@@ -1,10 +1,14 @@
 jobs:
   include:
-    - name: vm-fc30+minimal
-      env: DISTS_VM=fc30+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - name: vm-fc30+xfce
-      env: DISTS_VM=fc30+xfce USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
     - name: vm-fc31+minimal
       env: DISTS_VM=fc31+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
     - name: vm-fc31+xfce
       env: DISTS_VM=fc31+xfce USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-fc32+minimal
+      env: DISTS_VM=fc32+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-fc32+xfce
+      env: DISTS_VM=fc32+xfce USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-centos8+minimal
+      env: DISTS_VM=centos8+minimal USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
+    - name: vm-centos8+xfce
+      env: DISTS_VM=centos8+xfce USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
