@@ -65,10 +65,12 @@ COMMON = {
 
 SCRIPT = {
     '4.0': [
+        "~/qubes-builder/scripts/travis-prepare",
         "~/qubes-builder/scripts/travis-build",
         "~/qubes-builder/scripts/travis-install",
     ],
     '4.1': [
+        "~/qubes-builder/scripts/travis-prepare",
         "~/qubes-builder/scripts/travis-build",
         "~/qubes-builder/scripts/travis-install",
         "~/qubes-builder/scripts/travis-reprotest"

@@ -15,6 +15,7 @@ branches:
     - /.*_.*/
     - build
 script:
+  - ~/qubes-builder/scripts/travis-prepare
   - ~/qubes-builder/scripts/travis-build
   - ~/qubes-builder/scripts/travis-install
   - ~/qubes-builder/scripts/travis-reprotest
