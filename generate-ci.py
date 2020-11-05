@@ -149,6 +149,7 @@ class QubesCI:
             env = ' '.join(env)
             env_dist_tools = ' '.join(env_dist_tools)
         job = {
+            "stage": "build",
             "name": "dom0-%s" % DISTS[self.qubes_release]['dom0'],
             "env": env
         }
@@ -173,11 +174,11 @@ class QubesCI:
                         if vm in ('stretch', 'buster', 'bullseye'):
                             env = env_dist_tools
                         job = {
+                            "stage": "build",
                             "name": "vm-%s+%s" % (vm, flavor),
                             "env": env
                         }
                         jobs.append(job)
-
             else:
                 env = ['DISTS_VM=%s' % vm] + default_env
                 env_dist_tools = env + ['USE_DIST_BUILD_TOOLS=1']
@@ -187,7 +188,7 @@ class QubesCI:
                 if vm in ('stretch', 'buster', 'bullseye'):
                     env = env_dist_tools
                 job = {
-                    "stage": "test",
+                    "stage": "build",
                     "name": "vm-%s" % vm,
                     "env": env,
                 }
