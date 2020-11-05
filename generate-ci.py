@@ -73,7 +73,6 @@ SCRIPT = {
         "~/qubes-builder/scripts/travis-prepare",
         "~/qubes-builder/scripts/travis-build",
         "~/qubes-builder/scripts/travis-install",
-        "~/qubes-builder/scripts/travis-reprotest"
     ],
 }
 
@@ -192,6 +191,18 @@ class QubesCI:
                     "name": "vm-%s" % vm,
                     "env": env,
                 }
+                if vm in ('bullseye'):
+                    job_repro = {
+                        "stage": "repro",
+                        "name": "vm-%s" % vm,
+                        "env": env,
+                        "script": [
+                            "~/qubes-builder/scripts/travis-prepare",
+                            "~/qubes-builder/scripts/travis-build",
+                            "~/qubes-builder/scripts/travis-reprotest",
+                        ]
+                    }
+                    jobs.append(job_repro)
                 jobs.append(job)
         return jobs
 

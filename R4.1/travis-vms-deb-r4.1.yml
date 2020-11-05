@@ -1,8 +1,15 @@
 jobs:
   include:
-    - stage: test
+    - stage: build
       name: vm-buster
       env: DISTS_VM=buster USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1 USE_DIST_BUILD_TOOLS=1
-    - stage: test
+    - stage: repro
+      name: vm-bullseye
+      env: DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1 USE_DIST_BUILD_TOOLS=1
+      script:
+        - ~/qubes-builder/scripts/travis-prepare
+        - ~/qubes-builder/scripts/travis-build
+        - ~/qubes-builder/scripts/travis-reprotest
+    - stage: build
       name: vm-bullseye
       env: DISTS_VM=bullseye USE_QUBES_REPO_VERSION=4.1 USE_QUBES_REPO_TESTING=1 USE_DIST_BUILD_TOOLS=1

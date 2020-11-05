@@ -1,4 +1,5 @@
 jobs:
   include:
-    - name: dom0-fc25
+    - stage: build
+      name: dom0-fc25
       env: DIST_DOM0=fc25 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1

@@ -1,11 +1,11 @@
 jobs:
   include:
-    - stage: test
+    - stage: build
       name: vm-fc31
       env: DISTS_VM=fc31 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - stage: test
+    - stage: build
       name: vm-fc32
       env: DISTS_VM=fc32 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
-    - stage: test
+    - stage: build
       name: vm-centos8
       env: DISTS_VM=centos8 USE_QUBES_REPO_VERSION=4.0 USE_QUBES_REPO_TESTING=1
