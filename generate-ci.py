@@ -194,7 +194,7 @@ class QubesCI:
                 if vm in ('bullseye'):
                     job_repro = {
                         "stage": "repro",
-                        "name": "vm-%s" % vm,
+                        "name": "vm-%s-repro" % vm,
                         "env": env,
                         "script": [
                             "~/qubes-builder/scripts/travis-prepare",
