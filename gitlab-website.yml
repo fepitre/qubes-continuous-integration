@@ -1,7 +1,8 @@
 .website:
   stage: build
   before_script:
-    - sudo dnf install -y hunspell pandoc jq rubygems
+    - sudo dnf install -y hunspell pandoc jq rubygems ruby-devel
   script:
-    - git clone https://github.com/${CI_PROJECT_PATH%%/*}/qubesos.github.io ~/qubesos.github.io
+#    - git clone https://github.com/${CI_PROJECT_PATH%%/*}/qubesos.github.io ~/qubesos.github.io
+    - git clone -b ci https://gitlab.notset.fr/${CI_PROJECT_PATH%%/*}/qubesos.github.io ~/qubesos.github.io
     - ~/qubesos.github.io/_utils/gitlabci.sh
