@@ -1,4 +1,6 @@
 .website:
+  tags:
+    - notset-runner
   stage: build
   before_script:
     - sudo dnf install -y hunspell pandoc jq rubygems ruby-devel gcc-c++ pkg-config libxml2 libxslt libxml2-devel libxslt-devel rubygem-bundler
