@@ -1,0 +1,3 @@
+include:
+  - '/r4.1/gitlab-vm-centos-build.yml'
+  - '/r4.1/gitlab-vm-centos-install.yml'

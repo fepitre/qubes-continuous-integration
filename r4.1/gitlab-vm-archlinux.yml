@@ -1,0 +1,3 @@
+include:
+  - '/r4.1/gitlab-vm-archlinux-build.yml'
+  - '/r4.1/gitlab-vm-archlinux-install.yml'

@@ -1,0 +1,140 @@
+variables:
+  BACKEND_VMM: "xen"
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /pr-.*/ || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_REF_NAME =~ /.*-staging/'
+      when: always
+    - when: never
+
+default:
+  image: fepitre/qubesos-ci:latest
+  tags:
+    - docker
+
+stages:
+  - sources
+  - prepare
+  - checks
+  - build
+  - install
+  - template
+  - repro
+  - tests
+  - publish
+
+### TEMPLATES FOR PULLREQUEST JOBS
+
+.components_prepare:
+  # we enforce tags to not override it
+  tags:
+    - docker
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - qubes-builder.tar.gz
+  variables:
+    GIT_CLONE_FAST: 1
+  stage: sources
+  before_script:
+    - git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder
+  script:
+    - ~/qubes-builder/scripts/travis-prepare "$COMPONENTS"
+  after_script:
+    - tar cf $CI_PROJECT_DIR/qubes-builder.tar.gz --strip-components=1 -C ~/ qubes-builder
+
+.chroot_prepare:
+  # we enforce tags to not override it
+  tags:
+    - docker
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - chroot.tar.gz
+  variables:
+    USE_DIST_BUILD_TOOLS: 1
+  stage: prepare
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+  script:
+    - export BUILDERCONF=scripts/travis-builder.conf
+    - make -C ~/qubes-builder prepare-chroot-$([[ -n ${DIST_DOM0} ]] && echo dom0 || echo vm) COMPONENTS='$(BUILDER_PLUGINS)'
+  after_script:
+    - cd ~/qubes-builder
+    - make umount
+    - sudo tar cf $CI_PROJECT_DIR/chroot.tar.gz --strip-components=1 -C ~/qubes-builder chroot-*
+    - chown gitlab-runner:gitlab-runner $CI_PROJECT_DIR/chroot.tar.gz
+
+.components_build:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - build-logs
+      - qubes-packages-mirror-repo
+  variables:
+    USE_DIST_BUILD_TOOLS: 1
+  stage: build
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+  script:
+    - ~/qubes-builder/scripts/travis-build "$COMPONENTS"
+  after_script:
+    - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
+    - mv ~/qubes-builder/qubes-packages-mirror-repo $CI_PROJECT_DIR
+
+.components_install:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - travis-install.log
+  stage: install
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
+  script:
+    # make prepare-chroot-* is for mounting builder repo artifacts
+    - export BUILDERCONF=scripts/travis-builder.conf
+    - make -C ~/qubes-builder prepare-chroot-$([[ -n ${DIST_DOM0} ]] && echo dom0 || echo vm) COMPONENTS='$(BUILDER_PLUGINS)'
+    - ~/qubes-builder/scripts/travis-install
+  after_script:
+    - mv ~/qubes-builder/travis-install.log $CI_PROJECT_DIR/
+
+.components_repro:
+  image: fepitre/repro-bullseye:latest
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - travis-reprotest.log
+  stage: repro
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
+  script:
+    - ~/qubes-builder/scripts/travis-reprotest
+  after_script:
+    - mv ~/qubes-builder/travis-reprotest.log $CI_PROJECT_DIR/
+
+.iso_build:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - installer-qubes-os-iso-*.log
+  stage: build
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+  script:
+    - $EXPECT_FAILURE make -C ~/qubes-builder iso COMPONENTS=installer-qubes-os VERBOSE=0
+  after_script:
+    - mv ~/qubes-builder/build-logs/installer-qubes-os-iso-*.log $CI_PROJECT_DIR/
+
+###
+
+prep:sources:
+  extends: .components_prepare

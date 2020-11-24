@@ -1,0 +1,77 @@
+variables:
+  BACKEND_VMM: "xen"
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /pr-.*/ || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api" || $CI_COMMIT_REF_NAME == "release4.0"'
+      when: always
+    - when: never
+
+default:
+  tags:
+    - docker
+
+stages:
+  - prepare
+  - checks
+  - build
+  - install
+  - template
+  - repro
+  - tests
+  - publish
+
+### TEMPLATES FOR PULLREQUEST JOBS
+
+.components_prepare:
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - qubes-builder.tar.gz
+  variables:
+    GIT_CLONE_FAST: 1
+  stage: prepare
+  before_script:
+    - git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder
+  script:
+    - ~/qubes-builder/scripts/travis-prepare "$COMPONENTS"
+  after_script:
+    - tar cf $CI_PROJECT_DIR/qubes-builder.tar.gz --strip-components=1 -C ~/ qubes-builder
+
+.components_build:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - build-logs
+      - qubes-packages-mirror-repo
+  variables:
+    USE_DIST_BUILD_TOOLS: 1
+  stage: build
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+  script:
+    - ~/qubes-builder/scripts/travis-build "$COMPONENTS"
+  after_script:
+    - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
+    - mv ~/qubes-builder/qubes-packages-mirror-repo $CI_PROJECT_DIR
+
+.components_install:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - travis-install.log
+  stage: install
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
+  script:
+    - ~/qubes-builder/scripts/travis-install
+  after_script:
+    - mv ~/qubes-builder/travis-install.log $CI_PROJECT_DIR/
+
+###
+
+prep:sources:
+  extends: .components_prepare

@@ -1,0 +1,27 @@
+install:vm-buster:
+  extends: .components_install
+  needs:
+    - prep:sources
+    - build:vm-buster
+    - project: QubesOS/qubes-builder-debian
+      ref: master
+      job: chroot:vm-buster-legacy
+      artifacts: true
+  variables:
+    DISTS_VM: buster
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+install:vm-bullseye:
+  extends: .components_install
+  needs:
+    - prep:sources
+    - build:vm-bullseye
+    - project: QubesOS/qubes-builder-debian
+      ref: master
+      job: chroot:vm-bullseye-legacy
+      artifacts: true
+  variables:
+    DISTS_VM: bullseye
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
