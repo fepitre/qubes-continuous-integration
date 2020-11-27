@@ -20,4 +20,4 @@ workflow:
     - git clone https://github.com/${CI_PROJECT_PATH%%/*}/qubesos.github.io ~/qubesos.github.io
     - ~/qubesos.github.io/_utils/gitlabci.sh
   after_script:
-    - tar czf $CI_PROJECT_DIR/site.tar.gz _site
+    - tar czf $CI_PROJECT_DIR/site.tar.gz -C ~/qubesos.github.io _site
