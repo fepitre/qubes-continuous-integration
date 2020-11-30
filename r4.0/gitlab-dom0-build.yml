@@ -1,0 +1,12 @@
+build:dom0-fc25:
+  extends: .components_build
+  needs:
+    - prep:sources
+    - project: QubesOS/qubes-builder-rpm
+      ref: master
+      job: chroot:dom0-fc25
+      artifacts: true
+  variables:
+    DIST_DOM0: "fc25"
+    USE_QUBES_REPO_VERSION: "4.0"
+    USE_QUBES_REPO_TESTING: "1"
