@@ -6,7 +6,7 @@ workflow:
 
 .website:
   tags:
-    - docker-runner
+    - docker
     - short-living-job
   stage: build
   artifacts:
