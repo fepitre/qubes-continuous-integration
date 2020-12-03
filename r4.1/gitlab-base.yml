@@ -77,7 +77,7 @@ stages:
   stage: build
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
-    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    - if [ -e $CI_PROJECT_DIR/chroot.tar.gz ]; then sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder; fi
     # we import binpkgs from template build artifacts
     # which will replace the use of GENTOO_MIRROR
     - |
