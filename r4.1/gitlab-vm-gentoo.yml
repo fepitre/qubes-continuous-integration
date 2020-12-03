@@ -1,23 +1,2 @@
-variables:
-  GENTOO_MIRROR: https://mirror.notset.fr/gentoo/qubes
-
-build:vm-gentoo:
-  extends: .components_build
-  needs:
-    - prep:sources
-  variables:
-    DISTS_VM: gentoo
-
-build:vm-gentoo-minimal:
-  extends: .components_build
-  needs:
-    - prep:sources
-  variables:
-    DISTS_VM: gentoo+minimal
-
-build:vm-gentoo-xfce:
-  extends: .components_build
-  needs:
-    - prep:sources
-  variables:
-    DISTS_VM: gentoo+xfce
+include:
+  - '/r4.1/gitlab-vm-gentoo-build.yml'

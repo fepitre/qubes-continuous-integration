@@ -78,11 +78,23 @@ stages:
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
     - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    # we import binpkgs from template build artifacts
+    # which will replace the use of GENTOO_MIRROR
+    - |
+        if [ -e $CI_PROJECT_DIR/binpkgs ]; then
+            mkdir -p ~/qubes-builder/cache/gentoo
+            cp -r $CI_PROJECT_DIR/binpkgs ~/qubes-builder/cache/gentoo/
+        fi
   script:
     - ~/qubes-builder/scripts/travis-build "$COMPONENTS"
   after_script:
     - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
     - mv ~/qubes-builder/qubes-packages-mirror-repo $CI_PROJECT_DIR
+    - |
+        if [ -e ~/qubes-builder/cache/gentoo/binpkgs ] && [ "$COMPONENTS" == linux-template-builder ]; then
+            cp -r ~/qubes-builder/cache/gentoo/binpkgs $CI_PROJECT_DIR/;
+            rm -f $CI_PROJECT_DIR/binpkgs/.mnt
+        fi
 
 .components_install:
   artifacts:

@@ -1,0 +1,32 @@
+build:vm-gentoo:
+  extends: .components_build
+  needs:
+    - prep:sources
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
+      job: build:vm-gentoo
+      artifacts: true
+  variables:
+    DISTS_VM: gentoo
+
+build:vm-gentoo-minimal:
+  extends: .components_build
+  needs:
+    - prep:sources
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
+      job: build:vm-gentoo-minimal
+      artifacts: true
+  variables:
+    DISTS_VM: gentoo+minimal
+
+build:vm-gentoo-xfce:
+  extends: .components_build
+  needs:
+    - prep:sources
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
+      job: build:vm-gentoo-xfce
+      artifacts: true
+  variables:
+    DISTS_VM: gentoo+xfce
