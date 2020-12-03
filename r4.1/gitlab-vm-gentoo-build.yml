@@ -4,6 +4,10 @@ build:vm-gentoo:
     - prep:sources
     - project: QubesOS/qubes-builder-gentoo
       ref: master
+      job: chroot:vm-gentoo
+      artifacts: true
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
       job: build:vm-gentoo
       artifacts: true
   variables:
@@ -15,6 +19,10 @@ build:vm-gentoo-minimal:
     - prep:sources
     - project: QubesOS/qubes-builder-gentoo
       ref: master
+      job: chroot:vm-gentoo-minimal
+      artifacts: true
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
       job: build:vm-gentoo-minimal
       artifacts: true
   variables:
@@ -24,6 +32,10 @@ build:vm-gentoo-xfce:
   extends: .components_build
   needs:
     - prep:sources
+    - project: QubesOS/qubes-builder-gentoo
+      ref: master
+      job: chroot:vm-gentoo-xfce
+      artifacts: true
     - project: QubesOS/qubes-builder-gentoo
       ref: master
       job: build:vm-gentoo-xfce
