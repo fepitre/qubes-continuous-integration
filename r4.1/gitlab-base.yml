@@ -50,6 +50,7 @@ stages:
   artifacts:
     expire_in: 7 days
     paths:
+      - build-logs
       - chroot.tar.gz
   variables:
     USE_DIST_BUILD_TOOLS: 1
@@ -64,6 +65,7 @@ stages:
     - make umount
     - sudo tar cf $CI_PROJECT_DIR/chroot.tar.gz --strip-components=1 -C ~/qubes-builder chroot-*
     - chown gitlab-runner:gitlab-runner $CI_PROJECT_DIR/chroot.tar.gz
+    - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
 
 .components_build:
   artifacts:
