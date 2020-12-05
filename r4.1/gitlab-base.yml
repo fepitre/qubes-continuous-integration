@@ -64,7 +64,6 @@ stages:
     - cd ~/qubes-builder
     - make umount
     - sudo tar cf $CI_PROJECT_DIR/chroot.tar.gz --strip-components=1 -C ~/qubes-builder chroot-*
-    - chown gitlab-runner:gitlab-runner $CI_PROJECT_DIR/chroot.tar.gz
     - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
 
 .components_build:
