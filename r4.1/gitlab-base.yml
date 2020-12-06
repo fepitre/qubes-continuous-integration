@@ -62,9 +62,9 @@ stages:
     - make -C ~/qubes-builder prepare-chroot-$([[ -n ${DIST_DOM0} ]] && echo dom0 || echo vm) COMPONENTS='$(BUILDER_PLUGINS)'
   after_script:
     - cd ~/qubes-builder
+    - mv build-logs $CI_PROJECT_DIR/
     - make umount
     - sudo tar cf $CI_PROJECT_DIR/chroot.tar.gz --strip-components=1 -C ~/qubes-builder chroot-*
-    - mv ~/qubes-builder/build-logs $CI_PROJECT_DIR/
 
 .components_build:
   artifacts:
