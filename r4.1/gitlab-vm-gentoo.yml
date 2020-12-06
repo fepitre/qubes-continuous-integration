@@ -1,2 +1,5 @@
 include:
   - '/r4.1/gitlab-vm-gentoo-build.yml'
+
+variables:
+  GENTOO_MIRROR: https://mirror.notset.fr/gentoo/qubes

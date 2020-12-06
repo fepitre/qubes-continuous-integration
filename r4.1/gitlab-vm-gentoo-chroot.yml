@@ -1,6 +1,3 @@
-variables:
-  GENTOO_MIRROR: https://mirror.notset.fr/gentoo/qubes
-
 chroot:vm-gentoo:
   extends: .chroot_prepare
   needs:
