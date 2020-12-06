@@ -6,10 +6,10 @@ build:vm-gentoo:
       ref: master
       job: chroot:vm-gentoo
       artifacts: true
-    - project: QubesOS/qubes-builder-gentoo
-      ref: master
-      job: build:vm-gentoo
-      artifacts: true
+#    - project: QubesOS/qubes-builder-gentoo
+#      ref: master
+#      job: build:vm-gentoo
+#      artifacts: true
   variables:
     DISTS_VM: gentoo
 
@@ -21,10 +21,10 @@ build:vm-gentoo-minimal:
       ref: master
       job: chroot:vm-gentoo-minimal
       artifacts: true
-    - project: QubesOS/qubes-builder-gentoo
-      ref: master
-      job: build:vm-gentoo-minimal
-      artifacts: true
+#    - project: QubesOS/qubes-builder-gentoo
+#      ref: master
+#      job: build:vm-gentoo-minimal
+#      artifacts: true
   variables:
     DISTS_VM: gentoo+minimal
 
@@ -36,9 +36,9 @@ build:vm-gentoo-xfce:
       ref: master
       job: chroot:vm-gentoo-xfce
       artifacts: true
-    - project: QubesOS/qubes-builder-gentoo
-      ref: master
-      job: build:vm-gentoo-xfce
-      artifacts: true
+#    - project: QubesOS/qubes-builder-gentoo
+#      ref: master
+#      job: build:vm-gentoo-xfce
+#      artifacts: true
   variables:
     DISTS_VM: gentoo+xfce
