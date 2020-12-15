@@ -48,7 +48,7 @@ stages:
   tags:
     - docker
   artifacts:
-    expire_in: 7 days
+    expire_in: 30 days
     paths:
       - build-logs
       - chroot.tar.gz
