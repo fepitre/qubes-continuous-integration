@@ -117,7 +117,6 @@ stages:
     - mv ~/qubes-builder/travis-install.log $CI_PROJECT_DIR/
 
 .components_repro:
-  image: fepitre/repro-bullseye:latest
   artifacts:
     expire_in: 1 day
     when: always

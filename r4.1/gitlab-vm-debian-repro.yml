@@ -1,5 +1,6 @@
 repro:vm-buster:
   extends: .components_repro
+  image: fepitre/repro-buster:latest
   needs:
     - prep:sources
     - build:vm-buster
@@ -14,6 +15,7 @@ repro:vm-buster:
 
 repro:vm-bullseye:
   extends: .components_repro
+  image: fepitre/repro-bullseye:latest
   needs:
     - prep:sources
     - build:vm-bullseye
