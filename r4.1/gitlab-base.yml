@@ -32,7 +32,7 @@ stages:
   artifacts:
     expire_in: 1 day
     paths:
-      - qubes-builder.tar.gz
+      - qubes-builder.tar.xz
   variables:
     GIT_CLONE_FAST: 1
   stage: sources
@@ -41,7 +41,8 @@ stages:
   script:
     - ~/qubes-builder/scripts/travis-prepare "$COMPONENTS"
   after_script:
-    - tar cf $CI_PROJECT_DIR/qubes-builder.tar.gz --strip-components=1 -C ~/ qubes-builder
+    - tar cf $CI_PROJECT_DIR/qubes-builder.tar --strip-components=1 -C ~/ qubes-builder
+    - xz --force $CI_PROJECT_DIR/qubes-builder.tar
 
 .chroot_prepare:
   # we enforce tags to not override it
@@ -51,21 +52,23 @@ stages:
     expire_in: 30 days
     when: always
     paths:
-      - build-logs
-      - chroot.tar.gz
+      - build-logs.tar.xz
+      - chroot.tar.xz
   variables:
     USE_DIST_BUILD_TOOLS: 1
   stage: prepare
   before_script:
-    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
     - export BUILDERCONF=scripts/travis-builder.conf
     - make -C ~/qubes-builder prepare-chroot-$([[ -n ${DIST_DOM0} ]] && echo dom0 || echo vm) COMPONENTS='$(BUILDER_PLUGINS)'
   after_script:
     - cd ~/qubes-builder
-    - mv build-logs $CI_PROJECT_DIR/
+    - tar cf $CI_PROJECT_DIR/build-logs.tar --strip-components=1 -C ~/qubes-builder build-logs
+    - xz --force $CI_PROJECT_DIR/build-logs.tar
     - make umount
-    - sudo tar cf $CI_PROJECT_DIR/chroot.tar.gz --strip-components=1 -C ~/qubes-builder chroot-*
+    - sudo tar cf $CI_PROJECT_DIR/chroot.tar --strip-components=1 -C ~/qubes-builder chroot-*
+    - sudo xz --force $CI_PROJECT_DIR/chroot.tar
 
 .components_build:
   artifacts:
@@ -78,8 +81,8 @@ stages:
     USE_DIST_BUILD_TOOLS: 1
   stage: build
   before_script:
-    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
-    - if [ -e $CI_PROJECT_DIR/chroot.tar.gz ]; then sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder; fi
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+    - if [ -e $CI_PROJECT_DIR/chroot.tar.xz ]; then sudo tar xf $CI_PROJECT_DIR/chroot.tar.xz -C ~/qubes-builder; fi
 #    # we import binpkgs from template build artifacts
 #    - |
 #        if [ -e $CI_PROJECT_DIR/binpkgs ]; then
@@ -106,8 +109,8 @@ stages:
       - travis-install.log
   stage: install
   before_script:
-    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
-    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.xz -C ~/qubes-builder
     - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
   script:
     # make prepare-chroot-* is for mounting builder repo artifacts
@@ -125,8 +128,8 @@ stages:
       - travis-reprotest.log
   stage: repro
   before_script:
-    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
-    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.gz -C ~/qubes-builder
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+    - sudo tar xf $CI_PROJECT_DIR/chroot.tar.xz -C ~/qubes-builder
     - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
   script:
     - ~/qubes-builder/scripts/travis-reprotest
@@ -141,8 +144,9 @@ stages:
       - installer-qubes-os-iso-*.log
   stage: build
   before_script:
-    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.gz -C ~/
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
+    - ~/qubes-builder/scripts/travis-build "$COMPONENTS"
     - $EXPECT_FAILURE make -C ~/qubes-builder iso COMPONENTS=installer-qubes-os VERBOSE=0
   after_script:
     - mv ~/qubes-builder/build-logs/installer-qubes-os-iso-*.log $CI_PROJECT_DIR/
