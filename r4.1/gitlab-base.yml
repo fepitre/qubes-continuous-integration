@@ -41,8 +41,7 @@ stages:
   script:
     - ~/qubes-builder/scripts/travis-prepare "$COMPONENTS"
   after_script:
-    - tar cf $CI_PROJECT_DIR/qubes-builder.tar --strip-components=1 -C ~/ qubes-builder
-    - xz --force $CI_PROJECT_DIR/qubes-builder.tar
+    - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 
 .chroot_prepare:
   # we enforce tags to not override it
@@ -64,11 +63,9 @@ stages:
     - make -C ~/qubes-builder prepare-chroot-$([[ -n ${DIST_DOM0} ]] && echo dom0 || echo vm) COMPONENTS='$(BUILDER_PLUGINS)'
   after_script:
     - cd ~/qubes-builder
-    - tar cf $CI_PROJECT_DIR/build-logs.tar --strip-components=1 -C ~/qubes-builder build-logs
-    - xz --force $CI_PROJECT_DIR/build-logs.tar
+    - tar cJf $CI_PROJECT_DIR/build-logs.tar.xz --strip-components=1 -C ~/qubes-builder build-logs
     - make umount
-    - sudo tar cf $CI_PROJECT_DIR/chroot.tar --strip-components=1 -C ~/qubes-builder chroot-*
-    - sudo xz --force $CI_PROJECT_DIR/chroot.tar
+    - sudo tar cJf $CI_PROJECT_DIR/chroot.tar.xz --strip-components=1 -C ~/qubes-builder chroot-*
 
 .components_build:
   artifacts:
