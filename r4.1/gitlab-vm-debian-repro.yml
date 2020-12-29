@@ -12,6 +12,7 @@ repro:vm-buster:
     DISTS_VM: buster
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+  allow_failure: true
 
 repro:vm-bullseye:
   extends: .components_repro
