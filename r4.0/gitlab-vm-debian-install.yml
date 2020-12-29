@@ -1,3 +1,17 @@
+install:vm-stretch:
+  extends: .components_install
+  needs:
+    - prep:sources
+    - build:vm-stretch
+    - project: QubesOS/qubes-builder-debian
+      ref: master
+      job: chroot:vm-stretch-legacy
+      artifacts: true
+  variables:
+    DISTS_VM: stretch
+    USE_QUBES_REPO_VERSION: "4.0"
+    USE_QUBES_REPO_TESTING: "1"
+
 install:vm-buster:
   extends: .components_install
   needs:

@@ -1,0 +1,8 @@
+build:vm-stretch:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: buster
+    USE_QUBES_REPO_VERSION: "4.0"
+    USE_QUBES_REPO_TESTING: "1"

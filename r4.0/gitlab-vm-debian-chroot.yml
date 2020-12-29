@@ -1,0 +1,18 @@
+chroot:vm-stretch:
+  extends: .chroot_prepare
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: stretch
+    USE_QUBES_REPO_VERSION: "4.0"
+    USE_QUBES_REPO_TESTING: "1"
+
+chroot:vm-stretch-legacy:
+  extends: .chroot_prepare
+  needs:
+    - prep:sources
+  variables:
+    USE_DIST_BUILD_TOOLS: 0
+    DISTS_VM: stretch
+    USE_QUBES_REPO_VERSION: "4.0"
+    USE_QUBES_REPO_TESTING: "1"
