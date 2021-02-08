@@ -28,6 +28,30 @@ if [ -z "$YUM" ]; then
 fi
 APT="$(/usr/bin/which apt-get || true)"
 
+test -c /dev/fuse || mknod -m 666 /dev/fuse c 10 229
+
+# NOTE: we remove 'domain_host' variation as we execute into a chroot
+# for both DEB and RPM based distribution. We remove 'kernel' variation
+# for RPM based only as it's not supported. See reprotest manual
+
+if [ "$YUM" ]; then
+    # copy qubes-builder packages repo to /tmp/qubes-packages-mirror-repo
+    builder_repo_dir="$builderdir/qubes-packages-mirror-repo/$([[ -n ${DIST_DOM0} ]] && echo "dom0-${DIST_DOM0}" || echo "vm-${DISTS_VM}")"
+    sudo mkdir -p /tmp/qubes-packages-mirror-repo
+    sudo mount --bind "$builder_repo_dir" /tmp/qubes-packages-mirror-repo
+
+    sudo dnf makecache
+
+    # add mockbuild user
+    sudo useradd mockbuild
+
+    SRCRPMS="$(find /tmp/qubes-packages-mirror-repo -type f -name "*.src.rpm")"
+    for srcrpm in $SRCRPMS
+    do
+        sudo reprotest --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y $srcrpm" "$srcrpm" >> gitlab-reprotest.log 2>&1 || exit 1
+    done
+fi
+
 if [ "$APT" ]; then
     # copy qubes-builder packages repo to /tmp/qubes-repo
     builder_repo_dir="$builderdir/qubes-packages-mirror-repo/$([[ -n ${DIST_DOM0} ]] && echo "dom0-${DIST_DOM0}" || echo "vm-${DISTS_VM}")"
@@ -37,14 +61,9 @@ if [ "$APT" ]; then
     # update qubes-builder and Qubes repositories as we brought packages with artifacts
     sudo apt-get update
 
-    # install reprotest and devscripts
     CONTROLS="$(find /tmp/qubes-deb -type f -name "*.dsc")"
-
-    test -c /dev/fuse || mknod -m 666 /dev/fuse c 10 229
     for control in $CONTROLS
     do
-        # we remove 'domain_host' variation as we execute into a chroot
-        # see reprotest manual
         # shellcheck disable=SC2024
         sudo reprotest --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" >> gitlab-reprotest.log 2>&1 || exit 1
     done
