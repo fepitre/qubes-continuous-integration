@@ -1,0 +1,73 @@
+#!/bin/sh
+
+set -ex
+
+repo_name="$(basename "$PWD")"
+scripts_dir="$(dirname "$0")"
+
+# drop qubes- prefix
+repo_name=${repo_name#qubes-}
+
+# go to builder main directory
+cd "$scripts_dir/.."
+
+# shellcheck source=scripts/common
+. scripts/common
+
+if [ "0$VERBOSE" -eq 0 ]; then
+    # if not showing build log, echo some text to prevent Travis-CI timeout
+    keep_alive &
+    keep_alive_pid=$!
+fi
+
+trap 'exit_travis "" ${keep_alive_pid}' 0 1
+
+if [ -z "$DISTS_VM" ] && [ -z "$DIST_DOM0" ]; then
+    echo "Specify either DISTS_VM or DIST_DOM0 in .gitlab-ci.yml" >&2
+    exit 1
+fi
+
+if ! getent group mock >/dev/null; then
+    # mock require group with this specific name
+    sudo groupadd mock
+fi
+
+if [ -L /dev/shm ]; then
+    # don't use symlink for /dev/shm, as it will break when bind-mounting /dev
+    # into chroot (archlinux)
+    sudo rm -f /dev/shm
+    sudo mkdir /dev/shm
+    sudo mount -t tmpfs shm /dev/shm
+fi
+
+# use specific builder conf for GitlabCI builds
+export BUILDERCONF=scripts/gitlab-builder.conf
+
+if [ -n "$1" ]; then
+    # override_components
+    COMPONENTS="$1"
+else
+    COMPONENTS="$repo_name"
+fi
+
+# place cachedir outside qubes-builder (to not restore qubes-builder itself
+# from Travis-CI cache)
+mv cache "$HOME"/qubes-builder-cache
+ln -s "$HOME"/qubes-builder-cache cache
+
+# make sure dependencies are installed in case of copied previous
+# prepare stage artifacts
+make install-deps
+
+# Only linux-template-builder is common for all distros
+# Gentoo needs a special treatment if we want to build a specific package
+# because it's the overlay who has all the ebuilds.
+DIST="$(echo "$DISTS_VM"+ | cut -d '+' -f1)"
+TEMPLATE_FLAVOR="$(echo "$DISTS_VM"+ | cut -d '+' -f2)"
+if [ "$DIST" = gentoo ] && [ "$COMPONENTS" != linux-template-builder ]; then
+    "$scripts_dir"/gitlab-build-gentoo "${repo_name}" "${TEMPLATE_FLAVOR}"
+else
+    make COMPONENTS="$COMPONENTS" qubes
+fi
+
+find qubes-packages-mirror-repo -type f -ls -exec sha1sum {} +

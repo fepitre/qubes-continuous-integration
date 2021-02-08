@@ -1,0 +1,70 @@
+#!/bin/sh
+
+set -ex
+
+# go to builder main directory
+cd "$(dirname $0)/.."
+
+# shellcheck source=scripts/common
+. scripts/common
+
+# we don't show most of install log, echo some text to prevent Travis-CI timeout
+keep_alive &
+keep_alive_pid=$!
+
+trap 'exit_travis gitlab-install.log ${keep_alive_pid}' 0 1
+
+packages="$(find qubes-packages-mirror-repo/ -type f -regex '.*\(deb\|rpm\|zst\)$' 2>/dev/null)"
+if [ -z "$packages" ]; then
+    echo "Nothing was built, skipping install stage"
+    exit
+fi
+
+# we handle case where we run reprotest stage separately with build artifacts (e.g. GitlabCI).
+if [ "$1" = prepare-chroot ]; then
+    prepare_chroot
+fi
+
+chroot_dir="$(ls -d chroot-* || :)"
+if [ -z "$chroot_dir" ]; then
+    exit
+fi
+
+if [ -n "$DIST_DOM0" ] && [ -n "${TRAVIS_INSTALL_EXCLUDE_DOM0+test}" ]; then
+    TRAVIS_INSTALL_EXCLUDE=${TRAVIS_INSTALL_EXCLUDE_DOM0}
+fi
+
+YUM="$(get_yum "$chroot_dir")"
+APT="$(get_apt "$chroot_dir")"
+
+# remove fstab created by chroot builder
+# it causes failures in installing (core|gui)-agent-linux
+sudo rm -f "$chroot_dir/etc/fstab"
+
+if [ -n "$YUM" ]; then
+    # install all built RPMs
+    PKGS="$(sudo chroot "$chroot_dir" bash -c -l 'find /tmp/qubes-packages-mirror-repo/rpm/ -type f -name "*.rpm" ! -name "*.src.rpm"')"
+    for excluded in $TRAVIS_INSTALL_EXCLUDE
+    do
+        PKGS="$(echo "$PKGS" | sed "/$excluded-[0-9]/d")"
+    done
+    PKGS="$(echo "$PKGS" | tr '\n' ' ')"
+    if [ -n "${PKGS% }" ]; then
+        # shellcheck disable=SC2024
+        sudo chroot "$chroot_dir" bash -c -l "$YUM install --disablerepo=qubes-builder-pkgs -y $PKGS" > gitlab-install.log 2>&1 || exit 1
+    fi
+fi
+
+if [ "$APT" ]; then
+    # install all built DEBs
+    PKGS="$(sudo chroot "$chroot_dir" bash -c -l 'find /tmp/qubes-deb -type f -name "*.deb"')"
+    for excluded in $TRAVIS_INSTALL_EXCLUDE
+    do
+        PKGS="$(echo "$PKGS" | sed "/${excluded}_[0-9]/d")"
+    done
+    PKGS="$(echo "$PKGS" | tr '\n' ' ')"
+    if [ -n "${PKGS% }" ]; then
+        # shellcheck disable=SC2024
+        sudo chroot "$chroot_dir" bash -c -l "DEBIAN_FRONTEND=noninteractive DEBCONF_NOWARNINGS=yes DEBIAN_PRIORITY=critical apt-get -o Dpkg::Options::=--force-confnew --yes install $PKGS" > gitlab-install.log 2>&1 || exit 1
+    fi
+fi

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -ex
+
+# go to builder main directory
+scriptdir="$(readlink -f "$(dirname "$0")")"
+builderdir="$(readlink -f "$scriptdir"/..)"
+cd "$builderdir"
+
+# shellcheck source=scripts/common
+. scripts/common
+
+packages="$(find qubes-packages-mirror-repo/ -type f -regex '.*\(deb\|rpm\|zst\)$' 2>/dev/null)"
+if [ -z "$packages" ]; then
+    echo "Nothing was built, skipping reproducible stage"
+    exit
+fi
+
+# we don't show most of repro log, echo some text to prevent Travis-CI timeout
+keep_alive &
+keep_alive_pid=$!
+
+trap 'exit_travis gitlab-reprotest.log ${keep_alive_pid}' 0 1
+
+YUM="$(/usr/bin/which dnf || true)"
+if [ -z "$YUM" ]; then
+    YUM="$(/usr/bin/which yum || true)"
+fi
+APT="$(/usr/bin/which apt-get || true)"
+
+if [ "$APT" ]; then
+    # copy qubes-builder packages repo to /tmp/qubes-repo
+    builder_repo_dir="$builderdir/qubes-packages-mirror-repo/$([[ -n ${DIST_DOM0} ]] && echo "dom0-${DIST_DOM0}" || echo "vm-${DISTS_VM}")"
+    sudo mkdir -p /tmp/qubes-deb
+    sudo mount --bind "$builder_repo_dir" /tmp/qubes-deb
+
+    # update qubes-builder and Qubes repositories as we brought packages with artifacts
+    sudo apt-get update
+
+    # install reprotest and devscripts
+    CONTROLS="$(find /tmp/qubes-deb -type f -name "*.dsc")"
+
+    test -c /dev/fuse || mknod -m 666 /dev/fuse c 10 229
+    for control in $CONTROLS
+    do
+        # we remove 'domain_host' variation as we execute into a chroot
+        # see reprotest manual
+        # shellcheck disable=SC2024
+        sudo reprotest --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" >> gitlab-reprotest.log 2>&1 || exit 1
+    done
+fi
