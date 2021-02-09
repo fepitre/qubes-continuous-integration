@@ -20,7 +20,7 @@ fi
 keep_alive &
 keep_alive_pid=$!
 
-trap 'exit_travis gitlab-reprotest.log ${keep_alive_pid}' 0 1
+trap 'exit_ci gitlab-reprotest.log ${keep_alive_pid}' 0 1
 
 YUM="$(/usr/bin/which dnf || true)"
 if [ -z "$YUM" ]; then

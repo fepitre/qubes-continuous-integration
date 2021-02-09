@@ -20,7 +20,7 @@ if [ "0$VERBOSE" -eq 0 ]; then
     keep_alive_pid=$!
 fi
 
-trap 'exit_travis "" ${keep_alive_pid}' 0 1
+trap 'exit_ci "" ${keep_alive_pid}' 0 1
 
 if [ -z "$DISTS_VM" ] && [ -z "$DIST_DOM0" ]; then
     echo "Specify either DISTS_VM or DIST_DOM0 in .gitlab-ci.yml" >&2
