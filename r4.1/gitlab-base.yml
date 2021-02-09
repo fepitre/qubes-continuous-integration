@@ -128,6 +128,7 @@ stages:
     when: always
     paths:
       - gitlab-reprotest.log
+      - artifacts
   stage: repro
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
@@ -137,6 +138,7 @@ stages:
     - ~/qubes-builder/scripts/gitlab-reprotest
   after_script:
     - mv ~/qubes-builder/gitlab-reprotest.log $CI_PROJECT_DIR/
+    - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
 
 .iso_build:
   artifacts:

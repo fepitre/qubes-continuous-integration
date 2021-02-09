@@ -28,7 +28,11 @@ if [ -z "$YUM" ]; then
 fi
 APT="$(/usr/bin/which apt-get || true)"
 
+# Ensure to have fuse node
 test -c /dev/fuse || mknod -m 666 /dev/fuse c 10 229
+
+# Create artifacts folder to backup only failing tests
+mkdir "$builderdir/artifacts"
 
 # NOTE: we remove 'domain_host' variation as we execute into a chroot
 # for both DEB and RPM based distribution. We remove 'kernel' variation
@@ -48,7 +52,13 @@ if [ "$YUM" ]; then
     SRCRPMS="$(find /tmp/qubes-packages-mirror-repo -type f -name "*.src.rpm")"
     for srcrpm in $SRCRPMS
     do
-        sudo reprotest --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y $srcrpm" "$srcrpm" >> gitlab-reprotest.log 2>&1 || exit 1
+        job=$(basename "$srcrpm")
+        job="${job/.src.rpm/}"
+        mkdir -p "$job"
+        # shellcheck disable=SC2024
+        sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
+            --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y $srcrpm" "$srcrpm" \
+            >> gitlab-reprotest.log 2>&1 || exit 1
     done
 fi
 
@@ -64,7 +74,12 @@ if [ "$APT" ]; then
     CONTROLS="$(find /tmp/qubes-deb -type f -name "*.dsc")"
     for control in $CONTROLS
     do
+        job=$(basename "$control")
+        job="${job/.dsc/}"
+        mkdir -p "$job"
         # shellcheck disable=SC2024
-        sudo reprotest --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" >> gitlab-reprotest.log 2>&1 || exit 1
+        sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
+            --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" \
+            >> gitlab-reprotest.log 2>&1 || exit 1
     done
 fi
