@@ -57,7 +57,7 @@ if [ "$YUM" ]; then
         mkdir -p "$job"
         # shellcheck disable=SC2024
         sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
-            --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y $srcrpm" "$srcrpm" \
+            --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y --allowerasing $srcrpm" "$srcrpm" \
             >> gitlab-reprotest.log 2>&1 || exit 1
     done
 fi
