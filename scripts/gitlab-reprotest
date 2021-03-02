@@ -36,7 +36,9 @@ mkdir "$builderdir/artifacts"
 
 # NOTE: we remove 'domain_host' variation as we execute into a chroot
 # for both DEB and RPM based distribution. We remove 'kernel' variation
-# for RPM based only as it's not supported. See reprotest manual
+# for RPM based only as it's not supported. We also remove 'build_path'
+# variation only for RPM as they are built using Mock with a constant
+# path. See reprotest manual.
 
 if [ "$YUM" ]; then
     # copy qubes-builder packages repo to /tmp/qubes-packages-mirror-repo
@@ -57,7 +59,7 @@ if [ "$YUM" ]; then
         mkdir -p "$job"
         # shellcheck disable=SC2024
         sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
-            --vary=-domain_host,-kernel --testbed-build-pre "dnf builddep -y --allowerasing $srcrpm" "$srcrpm" \
+            --vary=-domain_host,-kernel,-build_path --testbed-build-pre "dnf builddep -y --allowerasing $srcrpm" "$srcrpm" \
             >> gitlab-reprotest.log 2>&1 || exit 1
     done
 fi
