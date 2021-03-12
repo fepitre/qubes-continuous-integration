@@ -32,7 +32,7 @@ APT="$(/usr/bin/which apt-get || true)"
 test -c /dev/fuse || mknod -m 666 /dev/fuse c 10 229
 
 # Create artifacts folder to backup only failing tests
-mkdir "$builderdir/artifacts"
+mkdir -p "$builderdir/artifacts"
 
 # NOTE: we remove 'domain_host' variation as we execute into a chroot
 # for both DEB and RPM based distribution. We remove 'kernel' variation
@@ -49,7 +49,9 @@ if [ "$YUM" ]; then
     sudo dnf makecache
 
     # add mockbuild user
-    sudo useradd mockbuild
+    if ! id -u mockbuild; then
+        sudo useradd mockbuild
+    fi
 
     SRCRPMS="$(find /tmp/qubes-packages-mirror-repo -type f -name "*.src.rpm")"
     for srcrpm in $SRCRPMS
@@ -58,9 +60,14 @@ if [ "$YUM" ]; then
         job="${job/.src.rpm/}"
         mkdir -p "$job"
         # shellcheck disable=SC2024
-        sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
-            --vary=-domain_host,-kernel,-build_path --testbed-build-pre "dnf builddep -y --allowerasing $srcrpm" "$srcrpm" \
-            >> gitlab-reprotest.log 2>&1 || exit 1
+        if sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
+                --vary=-domain_host,-kernel,-build_path --testbed-build-pre "dnf builddep -y --allowerasing $srcrpm" "$srcrpm" \
+                >> gitlab-reprotest.log 2>&1; then
+            echo "$job|YES" >> gitlab-reprotest-status.log
+        else
+            echo "$job|NO" >> gitlab-reprotest-status.log
+            exit_code=1
+        fi
     done
 fi
 
@@ -80,8 +87,18 @@ if [ "$APT" ]; then
         job="${job/.dsc/}"
         mkdir -p "$job"
         # shellcheck disable=SC2024
-        sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
-            --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" \
-            >> gitlab-reprotest.log 2>&1 || exit 1
+        if sudo reprotest --store-dir "$builderdir/artifacts/$job" --no-clean-on-error \
+                --vary=-domain_host --testbed-build-pre "apt-get -y --no-install-recommends build-dep $control" "$control" \
+                >> gitlab-reprotest.log 2>&1; then
+            echo "$job|YES" >> gitlab-reprotest-status.log
+        else
+            echo "$job|NO" >> gitlab-reprotest-status.log
+            exit_code=1
+        fi
     done
 fi
+
+# Display results summary
+{ echo; printf "%0.s=" {1..72}; } >> gitlab-reprotest.log
+column -t gitlab-reprotest-status.log -s'|' --table-columns COMPONENT,REPRODUCIBLE >> gitlab-reprotest.log
+exit $exit_code
