@@ -18,6 +18,7 @@ stages:
   - checks
   - build
   - install
+  - components
   - template
   - repro
   - tests
@@ -177,22 +178,36 @@ prep:sources:
     - make install-deps
     - make get-sources COMPONENTS='builder $(BUILDER_PLUGINS)'
     - make get-sources
+  after_script:
+    - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 
 .fullbuild_components_job:
   extends: .components_build
   tags:
     - vm
+  stage: components
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
     - cd ~/qubes-builder
     - make install-deps
+    # WIP: this is hack because 'qubes' is adding template stage too
     - make $([[ -n ${DIST_DOM0} ]] && echo qubes-dom0 || echo qubes-vm)
+  after_script:
+    - cp -r ~/qubes-builder/build-logs $CI_PROJECT_DIR/
+    - cp -r ~/qubes-builder/qubes-packages-mirror-repo $CI_PROJECT_DIR/
 
 .fullbuild_template_job:
   extends: .components_build
   tags:
     - vm
   stage: template
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+    - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
   script:
     - cd ~/qubes-builder
     - make install-deps
     - make template
+  after_script:
+    - cp -r ~/qubes-builder/build-logs $CI_PROJECT_DIR/
