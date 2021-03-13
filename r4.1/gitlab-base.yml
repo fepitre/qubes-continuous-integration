@@ -180,6 +180,8 @@ prep:sources:
 
 .fullbuild_components_job:
   extends: .components_build
+  tags:
+    - vm
   script:
     - cd ~/qubes-builder
     - make install-deps
@@ -187,6 +189,8 @@ prep:sources:
 
 .fullbuild_template_job:
   extends: .components_build
+  tags:
+    - vm
   stage: template
   script:
     - cd ~/qubes-builder
