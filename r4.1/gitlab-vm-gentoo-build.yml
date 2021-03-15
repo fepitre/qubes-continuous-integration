@@ -12,6 +12,7 @@ build:vm-gentoo:
 #      artifacts: true
   variables:
     DISTS_VM: gentoo
+  allow_failure: true
 
 build:vm-gentoo-minimal:
   extends: .components_build
@@ -27,6 +28,7 @@ build:vm-gentoo-minimal:
 #      artifacts: true
   variables:
     DISTS_VM: gentoo+minimal
+  allow_failure: true
 
 build:vm-gentoo-xfce:
   extends: .components_build
@@ -42,3 +44,4 @@ build:vm-gentoo-xfce:
 #      artifacts: true
   variables:
     DISTS_VM: gentoo+xfce
+  allow_failure: true
