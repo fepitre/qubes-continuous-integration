@@ -100,5 +100,5 @@ fi
 
 # Display results summary
 { echo; printf "%0.s=" {1..72}; } >> gitlab-reprotest.log
-column -t gitlab-reprotest-status.log -s'|' --table-columns COMPONENT,REPRODUCIBLE >> gitlab-reprotest.log
+column -t gitlab-reprotest-status.log -s'|' --table-columns COMPONENT,REPRODUCIBLE >> gitlab-reprotest.log || true
 exit $exit_code
