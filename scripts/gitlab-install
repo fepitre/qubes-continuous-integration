@@ -51,7 +51,7 @@ if [ -n "$YUM" ]; then
     PKGS="$(echo "$PKGS" | tr '\n' ' ')"
     if [ -n "${PKGS% }" ]; then
         # shellcheck disable=SC2024
-        sudo $YUM install --installroot="$chroot_dir" --disablerepo=qubes-builder-pkgs -y $PKGS > gitlab-install.log 2>&1 || exit 1
+        sudo $YUM install --installroot="$PWD/$chroot_dir" --disablerepo=qubes-builder-pkgs -y $PKGS > gitlab-install.log 2>&1 || exit 1
     fi
 fi
 
