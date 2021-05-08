@@ -15,3 +15,12 @@ build:vm-fc33:
     DISTS_VM: fc33
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+
+build:vm-fc34:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: fc34
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
