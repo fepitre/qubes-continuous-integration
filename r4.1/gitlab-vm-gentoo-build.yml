@@ -10,6 +10,8 @@ build:vm-gentoo:
 #      ref: master
 #      job: build:vm-gentoo
 #      artifacts: true
+  tags:
+    - long-living-job
   variables:
     DISTS_VM: gentoo
   allow_failure: true
@@ -26,6 +28,8 @@ build:vm-gentoo-minimal:
 #      ref: master
 #      job: build:vm-gentoo-minimal
 #      artifacts: true
+  tags:
+    - long-living-job
   variables:
     DISTS_VM: gentoo+minimal
   allow_failure: true
@@ -42,6 +46,8 @@ build:vm-gentoo-xfce:
 #      ref: master
 #      job: build:vm-gentoo-xfce
 #      artifacts: true
+  tags:
+    - long-living-job
   variables:
     DISTS_VM: gentoo+xfce
   allow_failure: true
