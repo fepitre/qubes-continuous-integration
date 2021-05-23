@@ -1,7 +1,7 @@
 chroot:vm-gentoo:
   extends: .chroot_prepare
   tags:
-    - vm
+    - docker
     - long-living-job
   needs:
     - prep:sources
@@ -13,7 +13,7 @@ chroot:vm-gentoo:
 chroot:vm-gentoo-minimal:
   extends: .chroot_prepare
   tags:
-    - vm
+    - docker
     - long-living-job
   needs:
     - prep:sources
@@ -25,7 +25,7 @@ chroot:vm-gentoo-minimal:
 chroot:vm-gentoo-xfce:
   extends: .chroot_prepare
   tags:
-    - vm
+    - docker
     - long-living-job
   needs:
     - prep:sources

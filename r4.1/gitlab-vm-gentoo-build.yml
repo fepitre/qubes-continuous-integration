@@ -11,6 +11,7 @@ build:vm-gentoo:
 #      job: build:vm-gentoo
 #      artifacts: true
   tags:
+    - docker
     - long-living-job
   variables:
     DISTS_VM: gentoo
@@ -29,6 +30,7 @@ build:vm-gentoo-minimal:
 #      job: build:vm-gentoo-minimal
 #      artifacts: true
   tags:
+    - docker
     - long-living-job
   variables:
     DISTS_VM: gentoo+minimal
@@ -47,6 +49,7 @@ build:vm-gentoo-xfce:
 #      job: build:vm-gentoo-xfce
 #      artifacts: true
   tags:
+    - docker
     - long-living-job
   variables:
     DISTS_VM: gentoo+xfce
