@@ -1,18 +1,18 @@
-chroot:vm-centos8:
+chroot:vm-centos-stream8:
   extends: .chroot_prepare
   needs:
     - prep:sources
   variables:
-    DISTS_VM: centos8
+    DISTS_VM: centos-stream8
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
 
-chroot:vm-centos8-legacy:
+chroot:vm-centos-stream8-legacy:
   extends: .chroot_prepare
   needs:
     - prep:sources
   variables:
     USE_DIST_BUILD_TOOLS: 0
-    DISTS_VM: centos8
+    DISTS_VM: centos-stream8
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
