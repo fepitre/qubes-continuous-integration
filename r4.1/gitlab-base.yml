@@ -43,7 +43,6 @@ stages:
     - mv ~/qubes-continuous-integration/scripts/* ~/qubes-builder/scripts/
   script:
     - ~/qubes-builder/scripts/gitlab-prepare "$COMPONENTS"
-  after_script:
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 
 .chroot_prepare:
