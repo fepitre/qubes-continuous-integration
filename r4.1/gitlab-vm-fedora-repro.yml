@@ -1,6 +1,6 @@
 repro:vm-fc33:
   extends: .components_repro
-  image: fepitre/repro-fedora:latest
+  image: fepitre/repro-fedora-33:latest
   needs:
     - prep:sources
     - build:vm-fc33
@@ -16,7 +16,7 @@ repro:vm-fc33:
 
 repro:vm-fc34:
   extends: .components_repro
-  image: fepitre/repro-fedora:latest
+  image: fepitre/repro-fedora-34:latest
   needs:
     - prep:sources
     - build:vm-fc34
