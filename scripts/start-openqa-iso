@@ -19,5 +19,5 @@ while [ -n "$1" ]; do
     shift
 done
 
-curl -f --header "JOB-TOKEN: $CI_JOB_TOKEN" --header "Content-type: application/octet-stream" \
-     --data-binary "@$iso_path" "https://openqa.qubes-os.org/api/run_test_iso?$params"
+curl -f -X POST --header "JOB-TOKEN: $CI_JOB_TOKEN" --header "Content-type: application/octet-stream" \
+     --upload-file "$iso_path" "https://openqa.qubes-os.org/api/run_test_iso?$params"
