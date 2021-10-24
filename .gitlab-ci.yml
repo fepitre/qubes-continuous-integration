@@ -61,4 +61,4 @@ publish:openqa:
     - publish:repo
   stage: publish
   script:
-    - ./scripts/start-openqa
+    - ./scripts/start-openqa-repo
