@@ -4,6 +4,12 @@ set -ex
 
 iso_path="$1"
 shift
+
+if ! [ -r "$iso_path" ]; then
+    echo "Skipping openQA, $iso_path doesn't exist"
+    exit 0
+fi
+
 params=
 while [ -n "$1" ]; do
     if [ -n "$params" ]; then
