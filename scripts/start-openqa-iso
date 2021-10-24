@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -ex
+
+iso_path="$1"
+shift
+params=
+while [ -n "$1" ]; do
+    if [ -n "$params" ]; then
+        params="${params}&"
+    fi
+    params="${params}$1"
+    shift
+done
+
+curl -f --header "JOB-TOKEN: $CI_JOB_TOKEN" --header "Content-type: application/octet-stream" \
+     --data-binary "@$iso_path" "https://openqa.qubes-os.org/api/run_test_iso?$params"
