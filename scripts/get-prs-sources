@@ -24,7 +24,7 @@ for pr in $prs; do
         continue
     fi
 
-    make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" get-sources
+    make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" BUILDERCONF=example-configs/qubes-os-master.conf get-sources
     git -C "$BUILDER_INSTANCE/qubes-src/${pr_component}" fetch $BASE_URL$pr_component refs/pull/$pr_number/head
     git -C "$BUILDER_INSTANCE/qubes-src/${pr_component}" merge --no-edit --no-ff FETCH_HEAD || { echo "Merge conflict on $pr"; exit 1; }
     make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" get-sources-extra
