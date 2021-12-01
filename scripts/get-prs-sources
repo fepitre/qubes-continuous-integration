@@ -17,7 +17,7 @@ for pr in $prs; do
     pr_number="${pr##*/}"
 
     base_branch=$(curl "${API_BASE}${pr_component}/pulls/${pr_number}" | jq -r .base.ref)
-    default_branch=$(make -s -C "$BUILDER_INSTANCE" get-var GET_VAR=BRANCH_${pr_component//-/_})
+    default_branch=$(make -s -C "$BUILDER_INSTANCE" BUILDERCONF=example-configs/qubes-os-master.conf get-var GET_VAR=BRANCH_${pr_component//-/_})
     [ -z "$default_branch" ] && default_branch=master
     if [ "$base_branch" != "$default_branch" ]; then
         echo "PR $pr is not against master, ignoring" >&2
