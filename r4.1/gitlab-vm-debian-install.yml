@@ -25,3 +25,17 @@ install:vm-bullseye:
     DISTS_VM: bullseye
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+
+install:vm-bookworm:
+  extends: .components_install
+  needs:
+    - prep:sources
+    - build:vm-bookworm
+    - project: QubesOS/qubes-builder-debian
+      ref: master
+      job: chroot:vm-bookworm-legacy
+      artifacts: true
+  variables:
+    DISTS_VM: bookworm
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
