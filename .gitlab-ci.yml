@@ -39,7 +39,6 @@ publish:repo:
     - build:dom0-fc32
     - build:vm-buster
     - build:vm-bullseye
-    - build:vm-fc33
     - build:vm-fc34
   stage: publish
   artifacts:
