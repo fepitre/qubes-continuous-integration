@@ -31,7 +31,7 @@ repro:vm-bullseye:
 
 repro:vm-bookworm:
   extends: .components_repro
-  image: fepitre/repro-bullseye:latest
+  image: fepitre/repro-bookworm:latest
   needs:
     - prep:sources
     - build:vm-bookworm
