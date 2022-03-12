@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -ex
+
+# Script is assumed in qubes-builderv2 root directory
+builder_dir="$(dirname "$0")"
+
+# Component directory is passed as argument
+component_dir="$1"
+component_name="$(basename "$component_dir")"
+
+if [ -z "$component_dir" ]; then
+    echo "Please provide component directory!"
+    exit 1
+fi
+
+if [ "${component_name#qubes-}" == "${component_name}" ]; then
+    echo "Cannot find 'qubes-' suffix. Is it a Qubes OS component?"
+    exit 1
+fi
+# Drop qubes- prefix
+component_name=${component_name#qubes-}
+
+# Go to builder root directory
+cd "$builder_dir"
+
+# Place Gitlab CI downloaded sources in artifacts/sources
+mkdir -p artifacts/sources
+cp -a "$component_dir" "artifacts/sources/$component_name"
+
+# Run fetch stage
+./qb -c "$component_name" package fetch

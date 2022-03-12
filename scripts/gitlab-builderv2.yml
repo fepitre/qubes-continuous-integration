@@ -1,0 +1,37 @@
+git:
+  baseurl: https://github.com
+  prefix: QubesOS/qubes-
+
+backend-vmm: xen
+
+debug: true
+verbose: true
+
+reuse-fetched-source: true
+
+use-qubes-repo:
+  version: 4.1
+  testing: true
+
+distributions:
+  - host-fc32
+  - vm-bullseye
+  - vm-fc35
+
+executor:
+  type: docker
+  options:
+    image: "qubes-builder-fedora:latest"
+
+stages:
+  - fetch
+  - prep
+  - build
+  - post
+  - verify
+  - sign:
+      executor:
+        type: local
+  - publish:
+      executor:
+        type: local
