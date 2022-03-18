@@ -1,4 +1,5 @@
-Key-Type: default
+Key-Type: RSA
+Key-Length: 4096
 Name-Real: Package TEST key
 Expire-Date: 0
 %no-protection
