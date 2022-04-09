@@ -10,7 +10,7 @@ workflow:
 default:
   image: fepitre/qubesos-ci:latest
   tags:
-    - docker
+    - vm
 
 stages:
   - sources
@@ -105,6 +105,8 @@ stages:
 #        fi
 
 .components_install:
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
@@ -125,6 +127,8 @@ stages:
     - mv ~/qubes-builder/gitlab-install.log $CI_PROJECT_DIR/
 
 .components_repro:
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
@@ -144,6 +148,8 @@ stages:
     - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
 
 .iso_build:
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
