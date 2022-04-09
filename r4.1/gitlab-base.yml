@@ -48,7 +48,7 @@ stages:
 .chroot_prepare:
   # we enforce tags to not override it
   tags:
-    - docker
+    - vm
   artifacts:
     expire_in: 30 days
     when: always
