@@ -9,6 +9,8 @@ chroot:dom0-fc25:
 
 chroot:dom0-fc25-legacy:
   extends: .chroot_prepare
+  tags:
+    - docker
   needs:
     - prep:sources
   variables:
@@ -28,6 +30,8 @@ chroot:dom0-fc32:
 
 chroot:dom0-fc32-legacy:
   extends: .chroot_prepare
+  tags:
+    - docker
   needs:
     - prep:sources
   variables:

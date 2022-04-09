@@ -9,6 +9,8 @@ chroot:vm-fc34:
 
 chroot:vm-fc34-legacy:
   extends: .chroot_prepare
+  tags:
+    - docker
   needs:
     - prep:sources
   variables:
@@ -28,6 +30,8 @@ chroot:vm-fc35:
 
 chroot:vm-fc35-legacy:
   extends: .chroot_prepare
+  tags:
+    - docker
   needs:
     - prep:sources
   variables:
