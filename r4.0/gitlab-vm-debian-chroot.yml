@@ -9,6 +9,10 @@ chroot:vm-stretch:
 
 chroot:vm-stretch-legacy:
   extends: .chroot_prepare
+  tags:
+    - docker
+  tags:
+    - docker
   needs:
     - prep:sources
   variables:

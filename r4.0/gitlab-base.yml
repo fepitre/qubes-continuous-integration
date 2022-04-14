@@ -10,7 +10,7 @@ workflow:
 default:
   image: fepitre/qubesos-ci:latest
   tags:
-    - docker
+    - vm
 
 stages:
   - sources
@@ -47,7 +47,7 @@ stages:
 .chroot_prepare:
   # we enforce tags to not override it
   tags:
-    - docker
+    - vm
   artifacts:
     expire_in: 30 days
     when: always
@@ -89,6 +89,8 @@ stages:
     - mv ~/qubes-builder/qubes-packages-mirror-repo $CI_PROJECT_DIR
 
 .components_install:
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
@@ -109,6 +111,8 @@ stages:
 
 .components_repro:
   image: fepitre/repro-bullseye:latest
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
@@ -125,6 +129,8 @@ stages:
     - mv ~/qubes-builder/gitlab-reprotest.log $CI_PROJECT_DIR/
 
 .iso_build:
+  tags:
+    - docker
   artifacts:
     expire_in: 1 day
     when: always
