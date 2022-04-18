@@ -35,4 +35,5 @@ cd "$builder_dir"
 # Run all stages
 ./qb -c "$component_name" -d "${dist}" package all
 
+mkdir -p artifacts/repository
 find artifacts/repository -type f -ls -exec sha1sum {} +
