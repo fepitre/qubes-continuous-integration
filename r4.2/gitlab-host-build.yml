@@ -1,5 +1,5 @@
-build:host-fc32:
-  extends: .components_build
+r4.2:build:host-fc32:
+  extends: .r4.2_components_build
   needs:
     - prep:sources
 # For now, qubes-builderv2 does not support environment variables

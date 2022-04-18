@@ -26,7 +26,7 @@ stages:
 
 ### TEMPLATES FOR PULLREQUEST JOBS
 
-.components_prepare:
+.r4.2_components_prepare:
   artifacts:
     expire_in: 1 day
     paths:
@@ -50,7 +50,7 @@ stages:
     - sudo rm -rf $CI_PROJECT_DIR/artifacts
     - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
 
-.components_build:
+.r4.2_components_build:
   artifacts:
     expire_in: 1 day
     when: always
@@ -71,5 +71,5 @@ stages:
 
 ###
 
-prep:sources:
-  extends: .components_prepare
+r4.2:prep:sources:
+  extends: .r4.2_components_prepare

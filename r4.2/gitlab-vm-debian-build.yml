@@ -1,5 +1,5 @@
-build:vm-bullseye:
-  extends: .components_build
+r4.2:build:vm-bullseye:
+  extends: .r4.2_components_build
   needs:
     - prep:sources
 # For now, qubes-builderv2 does not support environment variables
@@ -10,8 +10,8 @@ build:vm-bullseye:
 #    USE_QUBES_REPO_VERSION: "4.2"
 #    USE_QUBES_REPO_TESTING: "1"
 
-build:vm-bookworm:
-  extends: .components_build
+r4.2:build:vm-bookworm:
+  extends: .r4.2_components_build
   needs:
     - prep:sources
 #  variables:
