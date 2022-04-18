@@ -64,7 +64,7 @@ stages:
     # Extract from prepare stage qubes-builder directory
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
-    - ~/qubes-builder/gitlab-buildv2 "$CI_PROJECT_DIR" "${CI_JOB_NAME#build:}"
+    - ~/qubes-builder/gitlab-buildv2 "$CI_PROJECT_DIR" "${CI_JOB_NAME#r4.2:build:}"
   after_script:
     - sudo rm -rf $CI_PROJECT_DIR/artifacts
     - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
