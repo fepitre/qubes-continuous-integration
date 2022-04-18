@@ -1,7 +1,7 @@
 r4.2:build:host-fc32:
   extends: .r4.2_components_build
   needs:
-    - prep:sources
+    - r4.2:prep:sources
 # For now, qubes-builderv2 does not support environment variables
 # for settings parameters like USE_QUBES_REPO_*. In all the cases
 # version 4.1 in enforced in gitlab-builderv2.yml until 4.2 is
