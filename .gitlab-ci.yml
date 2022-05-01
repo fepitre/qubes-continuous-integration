@@ -40,6 +40,7 @@ publish:repo:
     - build:vm-buster
     - build:vm-bullseye
     - build:vm-fc34
+    - build:vm-fc35
   stage: publish
   artifacts:
     expire_in: 7 days
