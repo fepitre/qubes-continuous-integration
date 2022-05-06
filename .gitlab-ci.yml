@@ -11,6 +11,11 @@ workflow:
       when: always
     - when: never
 
+variables:
+  PR_LABEL:
+    value: "openqa-pending"
+    description: "Collect PRs with this label for the test run"
+
 prep:sources:
   extends: .components_prepare
   artifacts:
@@ -26,7 +31,7 @@ prep:sources:
     - ~/qubes-builder/scripts/gitlab-prepare "builder-rpm"
     - git config --global user.email "user@example.com"
     - git config --global user.name "builder"
-    - ./scripts/get-prs-sources
+    - ./scripts/get-prs-sources "$PR_LABEL"
     - echo INCREMENT_DEVEL_VERSIONS = 1 >> ~/qubes-builder/scripts/gitlab-builder.conf
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 
