@@ -40,7 +40,7 @@ stages:
     # Clone qubes-builderv2
     - git clone -b devel https://github.com/fepitre/qubes-builderv2 ~/qubes-builder
     # Clone and copy gitlab-ci builder configuration and scripts
-    - git clone -b builderv2 https://github.com/QubesOS/qubes-continuous-integration ~/qubes-continuous-integration
+    - git clone https://github.com/QubesOS/qubes-continuous-integration ~/qubes-continuous-integration
     - mv ~/qubes-continuous-integration/scripts/gitlab-*v2 ~/qubes-builder/
     - mv ~/qubes-continuous-integration/scripts/gitlab-builderv2.yml ~/qubes-builder/builder.yml
   script:
