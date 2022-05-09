@@ -38,7 +38,7 @@ stages:
     - docker pull fepitre/qubes-builder-fedora:latest
     - docker tag fepitre/qubes-builder-fedora:latest qubes-builder-fedora:latest
     # Clone qubes-builderv2
-    - git clone -b devel120422 https://github.com/fepitre/qubes-builderv2 ~/qubes-builder
+    - git clone -b devel https://github.com/fepitre/qubes-builderv2 ~/qubes-builder
     # Clone and copy gitlab-ci builder configuration and scripts
     - git clone -b builderv2 https://github.com/QubesOS/qubes-continuous-integration ~/qubes-continuous-integration
     - mv ~/qubes-continuous-integration/scripts/gitlab-*v2 ~/qubes-builder/
