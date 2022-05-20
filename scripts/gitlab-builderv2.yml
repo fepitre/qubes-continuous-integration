@@ -20,6 +20,9 @@ distributions:
 
 executor:
   type: local
+  options:
+    user: "gitlab-runner"
+    group: "gitlab-runner"
 
 stages:
   - fetch
