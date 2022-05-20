@@ -19,19 +19,15 @@ distributions:
   - vm-fc35
 
 executor:
-  type: docker
-  options:
-    image: "qubes-builder-fedora:latest"
+  type: local
 
 stages:
   - fetch
   - prep
+  - pre
   - build
   - post
   - verify
-  - sign:
-      executor:
-        type: local
-  - publish:
-      executor:
-        type: local
+  - sign
+  - publish
+  - upload
