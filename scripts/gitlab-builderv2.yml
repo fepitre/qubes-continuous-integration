@@ -18,11 +18,16 @@ distributions:
   - vm-bullseye
   - vm-fc35
 
+#executor:
+#  type: local
+#  options:
+#    user: "gitlab-runner"
+#    group: "gitlab-runner"
+
 executor:
-  type: local
+  type: docker
   options:
-    user: "gitlab-runner"
-    group: "gitlab-runner"
+    image: "qubes-builder-fedora:latest"
 
 stages:
   - fetch
@@ -31,6 +36,12 @@ stages:
   - build
   - post
   - verify
-  - sign
-  - publish
-  - upload
+  - sign:
+      executor:
+        type: local
+  - publish:
+      executor:
+        type: local
+  - upload:
+      executor:
+        type: local
