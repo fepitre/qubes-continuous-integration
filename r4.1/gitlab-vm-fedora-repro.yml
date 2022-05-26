@@ -29,3 +29,19 @@ repro:vm-fc35:
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
   allow_failure: true
+
+repro:vm-fc36:
+  extends: .components_repro
+  image: fepitre/repro-fedora-36:latest
+  needs:
+    - prep:sources
+    - build:vm-fc36
+    - project: QubesOS/qubes-builder-rpm
+      ref: master
+      job: chroot:vm-fc36-legacy
+      artifacts: true
+  variables:
+    DISTS_VM: fc36
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+  allow_failure: true

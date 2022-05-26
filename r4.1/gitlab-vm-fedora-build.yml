@@ -23,3 +23,16 @@ build:vm-fc35:
     DISTS_VM: fc35
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+
+build:vm-fc36:
+  extends: .components_build
+  needs:
+    - prep:sources
+    - project: QubesOS/qubes-builder-rpm
+      ref: master
+      job: chroot:vm-fc36
+      artifacts: true
+  variables:
+    DISTS_VM: fc36
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
