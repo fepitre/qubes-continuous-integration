@@ -1,6 +1,7 @@
 include:
   - '/r4.1/gitlab-base.yml'
   - '/r4.1/gitlab-dom0-build.yml'
+  - '/r4.1/gitlab-dom0-vm-openqa.yml'
   - '/r4.1/gitlab-vm-fedora-build.yml'
   - '/r4.1/gitlab-vm-debian-build.yml'
 #  - '/r4.1/gitlab-vm-archlinux-build.yml'
@@ -34,28 +35,6 @@ prep:sources:
     - ./scripts/get-prs-sources "$PR_LABEL"
     - echo INCREMENT_DEVEL_VERSIONS = 1 >> ~/qubes-builder/scripts/gitlab-builder.conf
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
-
-publish:repo:
-  # we enforce tags to not override it
-  tags:
-    - docker
-  needs:
-    # for qubes-packages-mirror-repo/*
-    - build:dom0-fc32
-    - build:vm-buster
-    - build:vm-bullseye
-    - build:vm-fc34
-    - build:vm-fc35
-  stage: publish
-  artifacts:
-    expire_in: 7 days
-    paths:
-    - repo
-  script:
-    - sudo dnf -y install rpm-sign
-    - gpg --generate-key --batch < scripts/repo-key.gpgbatch
-    - ./scripts/combine-and-sign-repo "$PWD/qubes-packages-mirror-repo" "$PWD/repo" TEST
-    - gpg -a --export > repo/key.pub
 
 publish:openqa:
   tags:

@@ -220,3 +220,20 @@ prep:sources:
     - make template
   after_script:
     - cp -r ~/qubes-builder/build-logs $CI_PROJECT_DIR/
+
+### OPENQA
+
+.openqa_repo:
+  # we enforce tags to not override it
+  tags:
+    - docker
+  stage: publish
+  artifacts:
+    expire_in: 7 days
+    paths:
+    - repo
+  script:
+    - sudo dnf -y install rpm-sign
+    - gpg --generate-key --batch < scripts/repo-key.gpgbatch
+    - ./scripts/combine-and-sign-repo "$PWD/qubes-packages-mirror-repo" "$PWD/repo" TEST
+    - gpg -a --export > repo/key.pub
