@@ -1,4 +1,4 @@
 publish:repo:
-  .extends: .openqa_repo
+  extends: .openqa_repo
   needs:
     - build:dom0-fc32
