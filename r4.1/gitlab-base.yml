@@ -232,7 +232,10 @@ prep:sources:
     expire_in: 7 days
     paths:
     - repo
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
+    - cd ~/qubes-builder
     - sudo dnf -y install rpm-sign
     - gpg --generate-key --batch < scripts/repo-key.gpgbatch
     - ./scripts/combine-and-sign-repo "$PWD/qubes-packages-mirror-repo" "$PWD/repo" TEST
