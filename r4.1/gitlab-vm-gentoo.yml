@@ -3,3 +3,4 @@ include:
 
 variables:
   GENTOO_MIRROR: https://gentoo.notset.fr/repo/qubes
+  RELEASE: 4.1
