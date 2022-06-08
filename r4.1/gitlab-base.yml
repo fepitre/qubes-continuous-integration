@@ -238,5 +238,5 @@ prep:sources:
     - cd ~/qubes-builder
     - sudo dnf -y install rpm-sign
     - gpg --generate-key --batch < scripts/repo-key.gpgbatch
-    - ./scripts/combine-and-sign-repo "$PWD/qubes-packages-mirror-repo" "$PWD/repo" TEST
-    - gpg -a --export > repo/key.pub
+    - ./scripts/combine-and-sign-repo "$CI_PROJECT_DIR/qubes-packages-mirror-repo" "$CI_PROJECT_DIR/repo" TEST
+    - gpg -a --export > "$CI_PROJECT_DIR/repo/key.pub"
