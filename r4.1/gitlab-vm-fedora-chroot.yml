@@ -1,24 +1,3 @@
-chroot:vm-fc34:
-  extends: .chroot_prepare
-  needs:
-    - prep:sources
-  variables:
-    DISTS_VM: fc34
-    USE_QUBES_REPO_VERSION: "4.1"
-    USE_QUBES_REPO_TESTING: "1"
-
-chroot:vm-fc34-legacy:
-  extends: .chroot_prepare
-  tags:
-    - docker
-  needs:
-    - prep:sources
-  variables:
-    USE_DIST_BUILD_TOOLS: 0
-    DISTS_VM: fc34
-    USE_QUBES_REPO_VERSION: "4.1"
-    USE_QUBES_REPO_TESTING: "1"
-
 chroot:vm-fc35:
   extends: .chroot_prepare
   needs:
