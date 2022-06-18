@@ -3,7 +3,6 @@ publish:repo:
   needs:
     - prep:sources
     - build:dom0-fc32
-    - build:vm-buster
     - build:vm-bullseye
     - build:vm-fc35
     - build:vm-fc36
