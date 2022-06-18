@@ -2,10 +2,10 @@ build:vm-buster:
   extends: .components_build
   needs:
     - prep:sources
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-buster
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-buster
+#      artifacts: true
   variables:
     DISTS_VM: buster
     USE_QUBES_REPO_VERSION: "4.1"
@@ -15,10 +15,10 @@ build:vm-bullseye:
   extends: .components_build
   needs:
     - prep:sources
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-bullseye
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-bullseye
+#      artifacts: true
   variables:
     DISTS_VM: bullseye
     USE_QUBES_REPO_VERSION: "4.1"
@@ -28,10 +28,10 @@ build:vm-bookworm:
   extends: .components_build
   needs:
     - prep:sources
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-bookworm
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-bookworm
+#      artifacts: true
   variables:
     DISTS_VM: bookworm
     USE_QUBES_REPO_VERSION: "4.1"

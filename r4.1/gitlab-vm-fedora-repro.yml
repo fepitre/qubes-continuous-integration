@@ -4,10 +4,10 @@ repro:vm-fc34:
   needs:
     - prep:sources
     - build:vm-fc34
-    - project: QubesOS/qubes-builder-rpm
-      ref: master
-      job: chroot:vm-fc34-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-fc34-legacy
+#      artifacts: true
   variables:
     DISTS_VM: fc34
     USE_QUBES_REPO_VERSION: "4.1"
@@ -20,10 +20,10 @@ repro:vm-fc35:
   needs:
     - prep:sources
     - build:vm-fc35
-    - project: QubesOS/qubes-builder-rpm
-      ref: master
-      job: chroot:vm-fc35-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-fc35-legacy
+#      artifacts: true
   variables:
     DISTS_VM: fc35
     USE_QUBES_REPO_VERSION: "4.1"
@@ -36,10 +36,10 @@ repro:vm-fc36:
   needs:
     - prep:sources
     - build:vm-fc36
-    - project: QubesOS/qubes-builder-rpm
-      ref: master
-      job: chroot:vm-fc36-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-fc36-legacy
+#      artifacts: true
   variables:
     DISTS_VM: fc36
     USE_QUBES_REPO_VERSION: "4.1"

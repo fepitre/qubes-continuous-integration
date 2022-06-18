@@ -2,10 +2,10 @@ build:vm-centos-stream8:
   extends: .components_build
   needs:
     - prep:sources
-    - project: QubesOS/qubes-builder-rpm
-      ref: master
-      job: chroot:vm-centos-stream8
-      artifacts: true
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-centos-stream8
+#      artifacts: true
   variables:
     DISTS_VM: centos-stream8
     USE_QUBES_REPO_VERSION: "4.1"

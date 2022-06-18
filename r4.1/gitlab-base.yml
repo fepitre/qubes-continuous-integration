@@ -108,7 +108,7 @@ stages:
   stage: install
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
-    - ~/qubes-builder/scripts/gitlab-chroot
+    - ~/qubes-builder/scripts/gitlab-chroot -legacy
     - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
   script:
     # make prepare-chroot-* is for mounting builder repo artifacts
@@ -130,7 +130,7 @@ stages:
   stage: repro
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
-    - ~/qubes-builder/scripts/gitlab-chroot
+    - ~/qubes-builder/scripts/gitlab-chroot -legacy
     - mv $CI_PROJECT_DIR/qubes-packages-mirror-repo/* ~/qubes-builder/qubes-packages-mirror-repo/
   script:
     - ~/qubes-builder/scripts/gitlab-reprotest

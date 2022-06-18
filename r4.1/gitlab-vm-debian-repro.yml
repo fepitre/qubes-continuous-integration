@@ -4,10 +4,10 @@ repro:vm-buster:
   needs:
     - prep:sources
     - build:vm-buster
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-buster-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-buster-legacy
+#      artifacts: true
   variables:
     DISTS_VM: buster
     USE_QUBES_REPO_VERSION: "4.1"
@@ -20,10 +20,10 @@ repro:vm-bullseye:
   needs:
     - prep:sources
     - build:vm-bullseye
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-bullseye-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-bullseye-legacy
+#      artifacts: true
   variables:
     DISTS_VM: bullseye
     USE_QUBES_REPO_VERSION: "4.1"
@@ -35,10 +35,10 @@ repro:vm-bookworm:
   needs:
     - prep:sources
     - build:vm-bookworm
-    - project: QubesOS/qubes-builder-debian
-      ref: master
-      job: chroot:vm-bookworm-legacy
-      artifacts: true
+#    - project: QubesOS/qubes-builder-debian
+#      ref: master
+#      job: chroot:vm-bookworm-legacy
+#      artifacts: true
   variables:
     DISTS_VM: bookworm
     USE_QUBES_REPO_VERSION: "4.1"
