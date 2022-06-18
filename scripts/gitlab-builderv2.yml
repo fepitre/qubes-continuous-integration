@@ -8,6 +8,7 @@ debug: true
 verbose: true
 
 reuse-fetched-source: true
+skip-git-fetch: true
 
 use-qubes-repo:
   version: 4.1
