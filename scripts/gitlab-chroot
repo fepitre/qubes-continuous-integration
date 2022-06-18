@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -ex
+
+if [ -z "$CI_PROJECT_DIR" ]; then
+    echo "Cannot find CI_PROJECT_DIR!"
+    exit 1
+fi
+
+if ! [ -e "$CI_PROJECT_DIR"/chroot.tar.xz ]; then
+    if [ -n "$DIST_DOM0" ]; then
+        CHROOT="dom0-${DIST_DOM0}"
+        QUBES_BUILDER="qubes-builder-rpm"
+    elif [ -n "$DISTS_VM" ]; then
+        CHROOT="vm-${DISTS_VM}"
+        if elementIn "$DISTS_VM" fc35 fc36 fc37 fc38 fc39; then
+            QUBES_BUILDER="qubes-builder-rpm"
+        elif [ "$DISTS_VM" == archlinux ]; then
+            QUBES_BUILDER="qubes-builder-archlinux"
+        elif elementIn "$DISTS_VM" buster bullseye bookworm; then
+            QUBES_BUILDER="qubes-builder-debian"
+        elif elementIn "$DISTS_VM" gentoo gentoo+minimal gentoo+xfce; then
+            QUBES_BUILDER="qubes-builder-gentoo"
+        fi
+    fi
+    if [ -z "$CHROOT" ] || [ -z "$QUBES_BUILDER" ]; then
+        echo "Cannot find required chroot archive!"
+        exit 1
+    fi
+    curl -L "https://gitlab.com/api/v4/projects/QubesOS%2F$QUBES_BUILDER/jobs/artifacts/master/raw/chroot.tar.xz?job=chroot:$CHROOT" -o "$CI_PROJECT_DIR"/chroot.tar.xz
+fi
+
+sudo tar xf "$CI_PROJECT_DIR"/chroot.tar.xz -C ~/qubes-builder
