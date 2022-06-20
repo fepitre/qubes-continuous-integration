@@ -23,7 +23,7 @@ if ! [ -e "$CI_PROJECT_DIR"/chroot.tar.xz ]; then
         QUBES_BUILDER="qubes-builder-rpm"
     elif [ -n "$DISTS_VM" ]; then
         CHROOT="vm-${DISTS_VM}"
-        if elementIn "$DISTS_VM" fc35 fc36 fc37 fc38 fc39; then
+        if elementIn "$DISTS_VM" fc35 fc36 fc37 fc38 fc39 centos-stream8 centos-stream9; then
             QUBES_BUILDER="qubes-builder-rpm"
         elif [ "$DISTS_VM" == archlinux ]; then
             QUBES_BUILDER="qubes-builder-archlinux"
