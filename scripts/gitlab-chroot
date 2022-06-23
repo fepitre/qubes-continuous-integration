@@ -27,10 +27,12 @@ if ! [ -e "$CI_PROJECT_DIR"/chroot.tar.xz ]; then
             QUBES_BUILDER="qubes-builder-rpm"
         elif [ "$DISTS_VM" == archlinux ]; then
             QUBES_BUILDER="qubes-builder-archlinux"
+            suffix=
         elif elementIn "$DISTS_VM" buster bullseye bookworm; then
             QUBES_BUILDER="qubes-builder-debian"
         elif elementIn "$DISTS_VM" gentoo gentoo+minimal gentoo+xfce; then
             QUBES_BUILDER="qubes-builder-gentoo"
+            suffix=
         fi
     fi
     if [ -z "$CHROOT" ] || [ -z "$QUBES_BUILDER" ]; then
