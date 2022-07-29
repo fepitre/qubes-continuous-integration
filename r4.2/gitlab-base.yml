@@ -1,5 +1,6 @@
 variables:
   BACKEND_VMM: "xen"
+  GIT_SUBMODULE_STRATEGY: recursive
 
 workflow:
   rules:
