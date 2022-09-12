@@ -56,7 +56,7 @@ stages:
     expire_in: 1 day
     when: always
     paths:
-      - artifacts
+      - artifacts/repository
   stage: build
   before_script:
     # Pull docker image for using (qubes-builder) docker executor
