@@ -19,14 +19,14 @@ for pr in $prs; do
     pr_number="${pr##*/}"
 
     base_branch=$(curl "${API_BASE}${pr_component}/pulls/${pr_number}" | jq -r .base.ref)
-    default_branch=$(make -s -C "$BUILDER_INSTANCE" BUILDERCONF=example-configs/qubes-os-master.conf get-var GET_VAR=BRANCH_${pr_component//-/_})
+    default_branch=$(make -s -C "$BUILDER_INSTANCE" BUILDERCONF=example-configs/qubes-os-master.conf BRANCH_linux_kernel=master get-var GET_VAR=BRANCH_${pr_component//-/_})
     [ -z "$default_branch" ] && default_branch=master
     if [ "$base_branch" != "$default_branch" ]; then
         echo "PR $pr is not against master, ignoring" >&2
         continue
     fi
 
-    make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" BUILDERCONF=example-configs/qubes-os-master.conf get-sources
+    make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" BUILDERCONF=example-configs/qubes-os-master.conf BRANCH_linux_kernel=master get-sources
     git -C "$BUILDER_INSTANCE/qubes-src/${pr_component}" fetch $BASE_URL$pr_component refs/pull/$pr_number/head
     git -C "$BUILDER_INSTANCE/qubes-src/${pr_component}" merge --no-edit --no-ff FETCH_HEAD || { echo "Merge conflict on $pr"; exit 1; }
     make -C "$BUILDER_INSTANCE" COMPONENTS="$pr_component" get-sources-extra
