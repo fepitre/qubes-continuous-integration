@@ -63,7 +63,7 @@ make COMPONENTS="$COMPONENTS" get-sources-extra
 # when building QWT, place the current component into windows-tools-cross
 # repository, instead of submodule included there
 if [ "$override_components" = windows-tools-cross ] && \
-       [ -d "qubes-src/windows-tools-cross/$repo_name" ]; then
-    rm -rf "qubes-src/windows-tools-cross/$repo_name"
-    cp -a "$repo_dir" "qubes-src/windows-tools-cross/$repo_name"
+       [ -d "qubes-src/windows-tools-cross/qubes-$repo_name" ]; then
+    rm -rf "qubes-src/windows-tools-cross/qubes-$repo_name"
+    cp -a "$repo_dir" "qubes-src/windows-tools-cross/qubes-$repo_name"
 fi
