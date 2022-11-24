@@ -16,6 +16,8 @@ variables:
   PR_LABEL:
     value: "openqa-pending"
     description: "Collect PRs with this label for the test run"
+  SELINUX_TEMPLATES:
+    description: "Test SELinux on those (space separated) templates"
 
 prep:sources:
   extends: .components_prepare
