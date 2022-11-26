@@ -20,7 +20,10 @@ use-qubes-repo:
 distributions:
   - host-fc32
   - vm-bullseye
+  - vm-bookworm
   - vm-fc35
+  - vm-fc36
+  - vm-fc37
 
 #executor:
 #  type: local
