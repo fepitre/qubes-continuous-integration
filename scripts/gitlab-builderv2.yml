@@ -24,6 +24,7 @@ distributions:
   - vm-fc35
   - vm-fc36
   - vm-fc37
+  - vm-centos-stream8
 
 #executor:
 #  type: local
