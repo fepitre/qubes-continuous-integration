@@ -18,6 +18,12 @@ variables:
     description: "Collect PRs with this label for the test run"
   SELINUX_TEMPLATES:
     description: "Test SELinux on those (space separated) templates"
+  UPDATE_TEMPLATES:
+    description: "List of templates to update (space separated)"
+  TEST_TEMPLATES:
+    description: "List of templates to run tests on (space separated)"
+  DEFAULT_TEMPLATE:
+    description: "Template to set as default, can be abbreviated like 'debian' for latest Debian version"
 
 prep:sources:
   extends: .components_prepare

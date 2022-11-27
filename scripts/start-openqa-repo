@@ -10,6 +10,15 @@ echo "{\"PULL_REQUESTS\":\"$(cat pull-requests.txt)\", \"REPO_JOB\": \"${job_url
 if [ -n "$SELINUX_TEMPLATES" ]; then
   echo ", \"SELINUX_TEMPLATES\": \"$SELINUX_TEMPLATES\"" >> params.txt
 fi
+if [ -n "$UPDATE_TEMPLATES" ]; then
+  echo ", \"UPDATE_TEMPLATES\": \"$UPDATE_TEMPLATES\"" >> params.txt
+fi
+if [ -n "$TEST_TEMPLATES" ]; then
+  echo ", \"TEST_TEMPLATES\": \"$TEST_TEMPLATES\"" >> params.txt
+fi
+if [ -n "$DEFAULT_TEMPLATE" ]; then
+  echo ", \"DEFAULT_TEMPLATE\": \"$DEFAULT_TEMPLATE\"" >> params.txt
+fi
 echo "}" >> params.txt
 
 curl -f --header "JOB-TOKEN: $CI_JOB_TOKEN" --header "Content-type: application/json" \
