@@ -39,7 +39,7 @@ if ! [ -e "$CI_PROJECT_DIR"/chroot.tar.xz ]; then
         echo "Cannot find required chroot archive!"
         exit 1
     fi
-    curl -L "https://gitlab.com/api/v4/projects/QubesOS%2F$QUBES_BUILDER/jobs/artifacts/master/raw/chroot.tar.xz?job=chroot:${CHROOT/+/-}${suffix}" -o "$CI_PROJECT_DIR"/chroot.tar.xz
+    curl -L "https://gitlab.com/api/v4/projects/QubesOS%2F$QUBES_BUILDER/jobs/artifacts/main/raw/chroot.tar.xz?job=chroot:${CHROOT/+/-}${suffix}" -o "$CI_PROJECT_DIR"/chroot.tar.xz
 fi
 
 sudo tar xf "$CI_PROJECT_DIR"/chroot.tar.xz -C ~/qubes-builder
