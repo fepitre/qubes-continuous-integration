@@ -63,6 +63,7 @@ build:vm-gentoo:
     - prep:sources
   variables:
     DISTS_VM: gentoo
+  allow_failure: true
 
 default:
   tags:
