@@ -2,6 +2,7 @@ build:vm-centos-stream8:
   extends: .components_build
   needs:
     - prep:sources
+    - chroot:vm-centos-stream8
   variables:
     DISTS_VM: centos-stream8
     USE_QUBES_REPO_VERSION: "4.1"

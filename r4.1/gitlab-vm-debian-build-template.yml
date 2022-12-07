@@ -2,6 +2,7 @@ build:vm-bullseye:
   extends: .components_build
   needs:
     - prep:sources
+    - chroot:vm-bullseye
   variables:
     DISTS_VM: bullseye
     USE_QUBES_REPO_VERSION: "4.1"
@@ -11,6 +12,7 @@ build:vm-bookworm:
   extends: .components_build
   needs:
     - prep:sources
+    - chroot:vm-bookworm
   variables:
     DISTS_VM: bookworm
     USE_QUBES_REPO_VERSION: "4.1"
