@@ -1,0 +1,81 @@
+include:
+  - project: 'QubesOS/qubes-continuous-integration'
+    file: '/r4.1/gitlab-base.yml'
+
+build:vm-centos-stream8:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: centos-stream8
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-fc35:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: fc35
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-fc36:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: fc36
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-bullseye:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: bullseye
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-bookworm:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: bookworm
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+  allow_failure: true
+
+build:vm-archlinux:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: archlinux
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-gentoo:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: gentoo
+
+default:
+  tags:
+    - vm
+
+after_script:
+  - ls -l ~/qubes-builder/qubes-src/linux-template-builder/rpm/noarch
+
+variables:
+  COMPONENTS: linux-template-builder
+  USE_DIST_BUILD_TOOL: 0
+
+prep:sources:
+  extends: .components_prepare
+  variables:
+    COMPONENTS: "builder-rpm builder-debian"
