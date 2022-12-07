@@ -6,18 +6,18 @@ build:vm-gentoo:
   variables:
     DISTS_VM: gentoo
 
-build:vm-gentoo-minimal:
-  extends: .components_build
-  needs:
-    - prep:sources
-    - chroot:vm-gentoo-minimal
-  variables:
-    DISTS_VM: gentoo+minimal
-
-build:vm-gentoo-xfce:
-  extends: .components_build
-  needs:
-    - prep:sources
-    - chroot:vm-gentoo-xfce
-  variables:
-    DISTS_VM: gentoo+xfce
+# build:vm-gentoo-minimal:
+#   extends: .components_build
+#   needs:
+#     - prep:sources
+#     - chroot:vm-gentoo-minimal
+#   variables:
+#     DISTS_VM: gentoo+minimal
+#
+# build:vm-gentoo-xfce:
+#   extends: .components_build
+#   needs:
+#     - prep:sources
+#     - chroot:vm-gentoo-xfce
+#   variables:
+#     DISTS_VM: gentoo+xfce
