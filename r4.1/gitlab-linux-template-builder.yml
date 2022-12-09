@@ -56,6 +56,7 @@ build:vm-archlinux:
     DISTS_VM: archlinux
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+  allow_failure: true
 
 build:vm-gentoo:
   extends: .components_build
