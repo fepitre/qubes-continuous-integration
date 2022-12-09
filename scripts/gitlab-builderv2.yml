@@ -14,7 +14,7 @@ reuse-fetched-source: true
 skip-git-fetch: true
 
 use-qubes-repo:
-  version: 4.1
+  version: 4.2
   testing: true
 
 distributions:

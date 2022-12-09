@@ -4,9 +4,8 @@ r4.2:build:vm-centos-stream8:
   needs:
     - r4.2:prep:sources
 # For now, qubes-builderv2 does not support environment variables
-# for settings parameters like USE_QUBES_REPO_*. In all the cases
-# version 4.1 in enforced in gitlab-builderv2.yml until 4.2 is
-# available in Qubes OS repositories.
+# for settings parameters like USE_QUBES_REPO_*. The version is set in the
+# gitlab-builderv2.yml
 #  variables:
 #    USE_QUBES_REPO_VERSION: "4.2"
 #    USE_QUBES_REPO_TESTING: "1"
