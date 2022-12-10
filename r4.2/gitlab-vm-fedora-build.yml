@@ -1,4 +1,4 @@
-r4.2:build:vm-fc35:
+r4.2:build:vm-fc36:
   extends: .r4.2_components_build
   needs:
     - r4.2:prep:sources
@@ -8,3 +8,8 @@ r4.2:build:vm-fc35:
 #  variables:
 #    USE_QUBES_REPO_VERSION: "4.2"
 #    USE_QUBES_REPO_TESTING: "1"
+
+r4.2:build:vm-fc37:
+  extends: .r4.2_components_build
+  needs:
+    - r4.2:prep:sources

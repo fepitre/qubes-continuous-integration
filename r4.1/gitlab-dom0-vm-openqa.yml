@@ -4,5 +4,5 @@ publish:repo:
     - prep:sources
     - build:dom0-fc32
     - build:vm-bullseye
-    - build:vm-fc35
     - build:vm-fc36
+    - build:vm-fc37
