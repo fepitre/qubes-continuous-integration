@@ -101,6 +101,8 @@ for sourcedir in "$indir"/*; do
     dist=${base#*-}
     if [ "$pkgset" = "dom0" ]; then
         handle_rpm_repo "$sourcedir" "$outdir/dom0"
+    elif [ "$pkgset" = "host" ]; then
+        handle_rpm_repo "$sourcedir" "$outdir/host"
     elif [[ "${dist}" = "fc"* ]]; then
         handle_rpm_repo "$sourcedir" "$outdir/vm/$dist"
     else

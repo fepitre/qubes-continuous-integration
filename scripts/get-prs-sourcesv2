@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -xe
+
+PR_LABEL="$1"
+
+search_results=$(curl https://api.github.com/search/issues?q="org:QubesOS+label:$PR_LABEL+is:open")
+prs=$(echo "$search_results" | jq -r '.items | .[] | .html_url')
+
+BASE_URL="https://github.com/QubesOS/qubes-"
+API_BASE="https://api.github.com/repos/QubesOS/qubes-"
+BUILDER_INSTANCE=$HOME/qubes-builder
+
+qb_opts=("--option" "+components+linux-kernel:branch=main" )
+
+components=""
+
+cd "$BUILDER_INSTANCE" || exit 1
+
+for pr in $prs; do
+    pr_short="${pr#${BASE_URL}}"
+    pr_component="${pr_short%%/*}"
+    pr_number="${pr##*/}"
+
+    base_branch=$(curl "${API_BASE}${pr_component}/pulls/${pr_number}" | jq -r .base.ref)
+    if [ "$base_branch" = "master" ]; then
+        # synchronize to new name
+        base_branch=main
+    fi
+    default_branch=$(./qb "${qb_opts[@]}" -c "${pr_component}" config get-components -a branch)
+    [ -z "$default_branch" ] && default_branch=main
+    if [ "$base_branch" != "$default_branch" ]; then
+        echo "PR $pr is not against $default_branch, ignoring" >&2
+        continue
+    fi
+
+    ./qb "${qb_opts[@]}" -c "${pr_component}" package fetch
+    git -C "artifacts/sources/${pr_component}" fetch $BASE_URL$pr_component refs/pull/$pr_number/head
+    git -C "artifacts/sources/${pr_component}" merge --no-edit --no-ff FETCH_HEAD || { echo "Merge conflict on $pr"; exit 1; }
+    # fetch new tarballs if necessary
+    ./qb "${qb_opts[@]}" -c "${pr_component}" package fetch
+    components="$components $pr_component"
+done
+
+# reorder and deduplicate components, according to canonical order in the example config
+desired_order=$(./qb config get-components)
+components_filter_re="^$(echo $components|sed 's/ /\$\\|^/g')\$"
+echo "components pre: $components"
+components=$(echo "$desired_order"|grep "$components_filter_re"|uniq)
+echo "components post: $(echo $components)"
+
+printf "components:\n" >> $BUILDER_INSTANCE/builder.yml
+printf -- '- %s\n' $components >> $BUILDER_INSTANCE/builder.yml
+echo $prs > "$CI_PROJECT_DIR/pull-requests.txt"

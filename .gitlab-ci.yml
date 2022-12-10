@@ -1,10 +1,10 @@
 include:
-  - '/r4.1/gitlab-base.yml'
-  - '/r4.1/gitlab-dom0-build.yml'
-  - '/r4.1/gitlab-dom0-vm-openqa.yml'
-  - '/r4.1/gitlab-vm-fedora-build.yml'
-  - '/r4.1/gitlab-vm-debian-build.yml'
-#  - '/r4.1/gitlab-vm-archlinux-build.yml'
+  - '/r4.2/gitlab-base.yml'
+  - '/r4.2/gitlab-host-build.yml'
+  - '/r4.2/gitlab-host-vm-openqa.yml'
+  - '/r4.2/gitlab-vm-fedora-build.yml'
+  - '/r4.2/gitlab-vm-debian-build.yml'
+#  - '/r4.2/gitlab-vm-archlinux-build.yml'
 
 workflow:
   rules:
@@ -25,23 +25,19 @@ variables:
   DEFAULT_TEMPLATE:
     description: "Template to set as default, can be abbreviated like 'debian' for latest Debian version"
 
-prep:sources:
-  extends: .components_prepare
+r4.2:prep:sources:
+  extends: .r4.2_components_prepare
   artifacts:
     expire_in: 1 day
     paths:
       - qubes-builder.tar.xz
       - pull-requests.txt
-  variables:
-    GIT_CLONE_FAST: 0
-    BUILDERCONF: scripts/gitlab-builder.conf
   script:
-    # prepare for dummy value, actual sources are downloaded later
-    - ~/qubes-builder/scripts/gitlab-prepare "builder-rpm"
     - git config --global user.email "user@example.com"
     - git config --global user.name "builder"
-    - ./scripts/get-prs-sources "$PR_LABEL"
-    - echo INCREMENT_DEVEL_VERSIONS = 1 >> ~/qubes-builder/scripts/gitlab-builder.conf
+    - cp ./scripts/gitlab-*v2 ~/qubes-builder/
+    - "echo increment-devel-versions: true >> ~/qubes-builder/builder.yml"
+    - ./scripts/get-prs-sourcesv2 "$PR_LABEL"
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 
 publish:openqa:
@@ -49,8 +45,8 @@ publish:openqa:
     - docker
   needs:
     # for pull-requests.txt
-    - prep:sources
-    - publish:repo
+    - r4.2:prep:sources
+    - r4.2:publish:repo
   stage: publish
   script:
     - ./scripts/start-openqa-repo

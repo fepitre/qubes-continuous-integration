@@ -74,3 +74,23 @@ stages:
 
 r4.2:prep:sources:
   extends: .r4.2_components_prepare
+
+### OPENQA
+
+.r4.2_openqa_repo:
+  # we enforce tags to not override it
+  tags:
+    - docker
+  stage: publish
+  artifacts:
+    expire_in: 7 days
+    paths:
+    - repo
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+  script:
+    - cd ~/qubes-builder
+    - sudo dnf -y install rpm-sign
+    - gpg --generate-key --batch < $CI_PROJECT_DIR/scripts/repo-key.gpgbatch
+    - $CI_PROJECT_DIR/scripts/combine-and-sign-repo "$CI_PROJECT_DIR/artifacts/repository" "$CI_PROJECT_DIR/repo" TEST
+    - gpg -a --export > "$CI_PROJECT_DIR/repo/key.pub"
