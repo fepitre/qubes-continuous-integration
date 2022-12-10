@@ -47,6 +47,8 @@ handle_deb_repo() {
         dist_tag=deb10
     elif [ "$dist" = "bullseye" ]; then
         dist_tag=deb11
+    elif [ "$dist" = "bookworm" ]; then
+        dist_tag=deb12
     else
         echo "Unknown dist $dist"
         exit 1
