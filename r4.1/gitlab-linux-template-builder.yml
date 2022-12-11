@@ -48,6 +48,30 @@ build:vm-bookworm:
     USE_QUBES_REPO_TESTING: "1"
   allow_failure: true
 
+build:vm-whonix-gateway-16:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: whonix-gateway-16
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+  # override before_script: we don't have chroot for whonix
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+
+build:vm-whonix-workstation-16:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: whonix-workstation-16
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+  # override before_script: we don't have chroot for whonix
+  before_script:
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+
 build:vm-archlinux:
   extends: .components_build
   needs:
