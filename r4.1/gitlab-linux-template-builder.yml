@@ -53,6 +53,8 @@ build:vm-archlinux:
   needs:
     - prep:sources
   variables:
+    # Template needs meta-packages to be built for installing Qubes repositories
+    COMPONENTS: "meta-packages linux-template-builder"
     DISTS_VM: archlinux
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
@@ -80,4 +82,4 @@ variables:
 prep:sources:
   extends: .components_prepare
   variables:
-    COMPONENTS: "builder-rpm builder-debian"
+    COMPONENTS: "builder-rpm builder-debian builder-archlinux builder-gentoo meta-packages"
