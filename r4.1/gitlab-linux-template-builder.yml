@@ -71,6 +71,7 @@ build:vm-whonix-workstation-16:
   # override before_script: we don't have chroot for whonix
   before_script:
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+  allow_failure: true
 
 build:vm-archlinux:
   extends: .components_build
