@@ -1,0 +1,5 @@
+r4.2:publish:repo:
+  extends: .r4.2_openqa_repo
+  needs:
+    - r4.2:prep:sources
+    - r4.2:build:host-fc32
