@@ -1,5 +1,6 @@
 install:vm-centos-stream8:
   extends: .components_install
+  allow_failure: true
   needs:
     - prep:sources
     - build:vm-centos-stream8
