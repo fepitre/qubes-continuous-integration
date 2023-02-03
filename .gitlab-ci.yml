@@ -38,7 +38,6 @@ r4.2:prep:sources:
     - cp ./scripts/gitlab-*v2 ~/qubes-builder/
     - cp ./scripts/repo-key.gpgbatch ~/qubes-builder/
     - cp ./scripts/combine-and-sign-repo ~/qubes-builder/
-    - "echo increment-devel-versions: true >> ~/qubes-builder/builder.yml"
     - ./scripts/get-prs-sourcesv2 "$PR_LABEL"
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
 

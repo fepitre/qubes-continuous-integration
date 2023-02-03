@@ -12,6 +12,7 @@ verbose: true
 
 reuse-fetched-source: true
 skip-git-fetch: true
+increment-devel-versions: true
 
 use-qubes-repo:
   version: 4.2
