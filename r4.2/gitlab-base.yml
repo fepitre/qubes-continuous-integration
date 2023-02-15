@@ -47,7 +47,7 @@ stages:
     - mv ~/qubes-continuous-integration/scripts/combine-and-sign-repo ~/qubes-builder/
     - mv ~/qubes-continuous-integration/scripts/gitlab-builderv2.yml ~/qubes-builder/builder.yml
   script:
-    - ~/qubes-builder/gitlab-preparev2 "$CI_PROJECT_DIR"
+    - ~/qubes-builder/gitlab-preparev2 "$CI_PROJECT_DIR" $SUBMODULE_OF
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
   after_script:
     - sudo rm -rf $CI_PROJECT_DIR/artifacts
@@ -67,7 +67,7 @@ stages:
     # Extract from prepare stage qubes-builder directory
     - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
   script:
-    - ~/qubes-builder/gitlab-buildv2 "$CI_PROJECT_DIR" "${CI_JOB_NAME#r4.2:build:}"
+    - ~/qubes-builder/gitlab-buildv2 "${COMPONENT-$CI_PROJECT_DIR}" "${DIST-${CI_JOB_NAME#r4.2:build:}}"
   after_script:
     - sudo rm -rf $CI_PROJECT_DIR/artifacts
     - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/

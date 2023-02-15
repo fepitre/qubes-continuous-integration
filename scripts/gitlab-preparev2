@@ -7,7 +7,15 @@ builder_dir="$(dirname "$0")"
 
 # Component directory is passed as argument
 component_dir="$1"
-component_name="$(basename "$component_dir")"
+
+# if submodule=true, treat $component_dir as submodule of $component_name
+submodule=false
+if [ -n "${2-}" ]; then
+    component_name="$2"
+    submodule=true
+else
+    component_name="$(basename "$component_dir")"
+fi
 
 if [ -z "$component_dir" ]; then
     echo "Please provide component directory!"
@@ -24,9 +32,21 @@ component_name=${component_name#qubes-}
 # Go to builder root directory
 cd "$builder_dir"
 
-# Place Gitlab CI downloaded sources in artifacts/sources
-mkdir -p artifacts/sources
-cp -a "$component_dir" "artifacts/sources/$component_name"
+if ! $submodule; then
+    # Place Gitlab CI downloaded sources in artifacts/sources
+    mkdir -p artifacts/sources
+    cp -a "$component_dir" "artifacts/sources/$component_name"
+fi
 
 # Run fetch stage
 ./qb -c "$component_name" package fetch
+
+if $submodule; then
+    submodule_name=$(basename "$component_dir")
+    if ! [ -d "artifacts/sources/$component_name/$submodule_name" ]; then
+        echo "$submodule_name is not within $component_name component"
+        exit 1
+    fi
+    rm -rf "artifacts/sources/$component_name/$submodule_name"
+    cp -a "$component_dir" "artifacts/sources/$component_name/$submodule_name"
+fi
