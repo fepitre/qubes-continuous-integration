@@ -2,17 +2,8 @@ r4.2:build:vm-bullseye:
   extends: .r4.2_components_build
   needs:
     - r4.2:prep:sources
-# For now, qubes-builderv2 does not support environment variables
-# for settings parameters like USE_QUBES_REPO_*. The version is set in the
-# gitlab-builderv2.yml
-#  variables:
-#    USE_QUBES_REPO_VERSION: "4.2"
-#    USE_QUBES_REPO_TESTING: "1"
 
 r4.2:build:vm-bookworm:
   extends: .r4.2_components_build
   needs:
     - r4.2:prep:sources
-#  variables:
-#    USE_QUBES_REPO_VERSION: "4.2"
-#    USE_QUBES_REPO_TESTING: "1"

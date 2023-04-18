@@ -3,9 +3,3 @@ r4.2:build:vm-archlinux:
   needs:
     - r4.2:prep:sources
   allow_failure: true
-# For now, qubes-builderv2 does not support environment variables
-# for settings parameters like USE_QUBES_REPO_*. The version is set in the
-# gitlab-builderv2.yml
-#  variables:
-#    USE_QUBES_REPO_VERSION: "4.2"
-#    USE_QUBES_REPO_TESTING: "1"
