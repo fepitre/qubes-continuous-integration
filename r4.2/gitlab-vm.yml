@@ -2,5 +2,5 @@ include:
   - '/r4.2/gitlab-vm-fedora.yml'
   - '/r4.2/gitlab-vm-centos.yml'
   - '/r4.2/gitlab-vm-debian.yml'
-  # - '/r4.2/gitlab-vm-gentoo.yml'
-  # - '/r4.2/gitlab-vm-archlinux.yml'
+  - '/r4.2/gitlab-vm-archlinux.yml'
+#  - '/r4.2/gitlab-vm-gentoo.yml'
