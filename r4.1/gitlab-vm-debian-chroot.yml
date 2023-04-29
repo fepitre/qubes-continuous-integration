@@ -40,23 +40,20 @@ chroot:vm-bookworm-legacy:
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
 
-chroot:vm-bionic:
+chroot:vm-focal:
   extends: .chroot_prepare
   needs:
     - prep:sources
   variables:
-    DISTS_VM: bionic
+    DISTS_VM: focal
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
 
-#chroot:vm-bionic-legacy:
-#  extends: .chroot_prepare
-#  tags:
-#    - docker
-#  needs:
-#    - prep:sources
-#  variables:
-#    USE_DIST_BUILD_TOOLS: 0
-#    DISTS_VM: bionic
-#    USE_QUBES_REPO_VERSION: "4.1"
-#    USE_QUBES_REPO_TESTING: "1"
+chroot:vm-jammy:
+  extends: .chroot_prepare
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: jammy
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
