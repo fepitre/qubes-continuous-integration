@@ -28,6 +28,8 @@ distributions:
   - vm-fc38
   - vm-centos-stream8
   - vm-archlinux
+  - vm-focal
+  - vm-jammy
 
 #executor:
 #  type: local
