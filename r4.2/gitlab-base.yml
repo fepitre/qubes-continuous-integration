@@ -41,7 +41,7 @@ stages:
     # Clone qubes-builderv2
     - git clone https://github.com/QubesOS/qubes-builderv2 ~/qubes-builder
     # Clone and copy gitlab-ci builder configuration and scripts
-    - git clone https://github.com/QubesOS/qubes-continuous-integration ~/qubes-continuous-integration
+    - git clone -b ${CI_BRANCH_REF:-main} https://github.com/QubesOS/qubes-continuous-integration ~/qubes-continuous-integration
     - mv ~/qubes-continuous-integration/scripts/gitlab-*v2 ~/qubes-builder/
     - mv ~/qubes-continuous-integration/dockerfiles/*.Dockerfile ~/qubes-builder/dockerfiles/
     - mv ~/qubes-continuous-integration/scripts/repo-key.gpgbatch ~/qubes-builder/
