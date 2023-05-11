@@ -47,7 +47,7 @@ stages:
     - mv ~/qubes-continuous-integration/scripts/repo-key.gpgbatch ~/qubes-builder/
     - mv ~/qubes-continuous-integration/scripts/combine-and-sign-repo ~/qubes-builder/
     - mv ~/qubes-continuous-integration/scripts/gitlab-builderv2.yml ~/qubes-builder/builder.yml
-    - ls -R ~/qubes-builder/
+    - tree ~/qubes-builder/
   script:
     - ~/qubes-builder/gitlab-preparev2 "$CI_PROJECT_DIR" $SUBMODULE_OF
     - tar cJf $CI_PROJECT_DIR/qubes-builder.tar.xz --strip-components=1 -C ~/ qubes-builder
