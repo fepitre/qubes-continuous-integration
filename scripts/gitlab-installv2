@@ -18,10 +18,10 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
     container_image = qubes_distribution.distribution
     if qubes_distribution.fullname == "fedora":
         pkgext = "rpm"
-        run_cmd = "dnf update && dnf -y install"
+        run_cmd = "dnf -y update && dnf -y install"
     elif qubes_distribution.fullname == "centos-stream":
         pkgext = "rpm"
-        run_cmd = "dnf update && dnf -y install"
+        run_cmd = "dnf -y update && dnf -y install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
         pkgext = "deb"
         run_cmd = "apt update && apt -y install"
