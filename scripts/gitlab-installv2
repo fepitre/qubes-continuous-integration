@@ -24,7 +24,7 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
         run_cmd = "dnf -y update && dnf -y install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
         pkgext = "deb"
-        run_cmd = "apt update && apt -y install"
+        run_cmd = "apt update && apt-get -y install"
     elif qubes_distribution.fullname == "archlinux":
         pkgext = "pkg.tar.zst"
         run_cmd = "pacman -Sy  && pacman -U --noconfirm"
