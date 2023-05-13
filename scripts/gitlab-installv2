@@ -16,6 +16,7 @@ class CIError(Exception):
 
 def main(qubes_distribution: QubesDistribution, repository: Path):
     container_image = qubes_distribution.distribution
+    environment = {}
     if qubes_distribution.fullname == "fedora":
         pkgext = "rpm"
         run_cmd = "dnf -y update && dnf -y install"
@@ -24,7 +25,14 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
         run_cmd = "dnf -y update && dnf -y install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
         pkgext = "deb"
-        run_cmd = "apt update && apt-get -y install"
+        run_cmd = "apt update && env; apt-get -o 'Dpkg::Options::=--force-confnew' -y install"
+        environment.update(
+            {
+                "DEBIAN_FRONTEND": "noninteractive",
+                "DEBIAN_PRIORITY": "critical",
+                "DEBCONF_NOWARNINGS": "yes",
+            }
+        )
     elif qubes_distribution.fullname == "archlinux":
         pkgext = "pkg.tar.zst"
         run_cmd = "pacman -Sy  && pacman -U --noconfirm"
@@ -35,8 +43,8 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
         os.environ.get("TRAVIS_INSTALL_EXCLUDE_DOM0", "").strip("\n").split()
     )
     excluded_packages = (
-            os.environ.get("TRAVIS_INSTALL_EXCLUDE", "").strip("\n").split()
-            + excluded_packages_host
+        os.environ.get("TRAVIS_INSTALL_EXCLUDE", "").strip("\n").split()
+        + excluded_packages_host
     )
     packages = [
         pkg
@@ -55,8 +63,7 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
     cmd = [f"{run_cmd} /repository/*.{pkgext}"]
     executor = ContainerExecutor("docker", container_image)
     executor.run(
-        cmd, copy_in=copy_in, override_container_cmd=True,
-        environment={"DEBIAN_FRONTEND": "noninteractive"}
+        cmd, copy_in=copy_in, override_container_cmd=True, environment=environment
     )
 
 
