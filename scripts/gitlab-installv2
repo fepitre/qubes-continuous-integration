@@ -25,7 +25,9 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
         run_cmd = "dnf -y update && dnf -y install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
         pkgext = "deb"
-        run_cmd = "apt update && env; apt-get -o 'Dpkg::Options::=--force-confnew' -y install"
+        run_cmd = (
+            "apt update && env; apt-get -o 'Dpkg::Options::=--force-confnew' -y install"
+        )
         environment.update(
             {
                 "DEBIAN_FRONTEND": "noninteractive",
@@ -41,9 +43,11 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
 
     excluded_packages_host = (
         os.environ.get("TRAVIS_INSTALL_EXCLUDE_DOM0", "").strip("\n").split()
+        + os.environ.get("CI_INSTALL_EXCLUDE_DOM0", "").strip("\n").split()
     )
     excluded_packages = (
         os.environ.get("TRAVIS_INSTALL_EXCLUDE", "").strip("\n").split()
+        + os.environ.get("CI_INSTALL_EXCLUDE", "").strip("\n").split()
         + excluded_packages_host
     )
     packages = [
