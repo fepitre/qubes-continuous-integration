@@ -19,10 +19,10 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
     environment = {}
     if qubes_distribution.fullname == "fedora":
         pkgext = "rpm"
-        run_cmd = "dnf -y update && dnf -y install"
+        run_cmd = "dnf -y update && dnf -y --allowerasing install"
     elif qubes_distribution.fullname == "centos-stream":
         pkgext = "rpm"
-        run_cmd = "dnf -y update && dnf -y install"
+        run_cmd = "dnf -y update && dnf -y --allowerasing install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
         pkgext = "deb"
         run_cmd = (
