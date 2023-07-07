@@ -1,17 +1,3 @@
-install:vm-fc36:
-  extends: .components_install
-  needs:
-    - prep:sources
-    - build:vm-fc36
-#    - project: QubesOS/qubes-builder-rpm
-#      ref: master
-#      job: chroot:vm-fc36-legacy
-#      artifacts: true
-  variables:
-    DISTS_VM: fc36
-    USE_QUBES_REPO_VERSION: "4.1"
-    USE_QUBES_REPO_TESTING: "1"
-
 install:vm-fc37:
   extends: .components_install
   needs:
@@ -25,3 +11,18 @@ install:vm-fc37:
     DISTS_VM: fc37
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
+
+install:vm-fc38:
+  extends: .components_install
+  needs:
+    - prep:sources
+    - build:vm-fc38
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-fc38-legacy
+#      artifacts: true
+  variables:
+    DISTS_VM: fc38
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+

@@ -1,19 +1,3 @@
-repro:vm-fc36:
-  extends: .components_repro
-  image: fepitre/repro-fedora-36:latest
-  needs:
-    - prep:sources
-    - build:vm-fc36
-#    - project: QubesOS/qubes-builder-rpm
-#      ref: master
-#      job: chroot:vm-fc36-legacy
-#      artifacts: true
-  variables:
-    DISTS_VM: fc36
-    USE_QUBES_REPO_VERSION: "4.1"
-    USE_QUBES_REPO_TESTING: "1"
-  allow_failure: true
-
 repro:vm-fc37:
   extends: .components_repro
   image: fepitre/repro-fedora-35:latest
@@ -29,3 +13,20 @@ repro:vm-fc37:
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
   allow_failure: true
+
+repro:vm-fc38:
+  extends: .components_repro
+  image: fepitre/repro-fedora-36:latest
+  needs:
+    - prep:sources
+    - build:vm-fc38
+#    - project: QubesOS/qubes-builder-rpm
+#      ref: master
+#      job: chroot:vm-fc38-legacy
+#      artifacts: true
+  variables:
+    DISTS_VM: fc38
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+  allow_failure: true
+

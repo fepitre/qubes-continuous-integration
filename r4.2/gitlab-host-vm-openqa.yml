@@ -4,6 +4,5 @@ r4.2:publish:repo:
     - r4.2:prep:sources
     - r4.2:build:host-fc37
     - r4.2:build:vm-bullseye
-    - r4.2:build:vm-fc36
     - r4.2:build:vm-fc37
     - r4.2:build:vm-fc38

@@ -11,21 +11,21 @@ build:vm-centos-stream8:
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
 
-build:vm-fc36:
-  extends: .components_build
-  needs:
-    - prep:sources
-  variables:
-    DISTS_VM: fc36
-    USE_QUBES_REPO_VERSION: "4.1"
-    USE_QUBES_REPO_TESTING: "1"
-
 build:vm-fc37:
   extends: .components_build
   needs:
     - prep:sources
   variables:
     DISTS_VM: fc37
+    USE_QUBES_REPO_VERSION: "4.1"
+    USE_QUBES_REPO_TESTING: "1"
+
+build:vm-fc38:
+  extends: .components_build
+  needs:
+    - prep:sources
+  variables:
+    DISTS_VM: fc38
     USE_QUBES_REPO_VERSION: "4.1"
     USE_QUBES_REPO_TESTING: "1"
 
