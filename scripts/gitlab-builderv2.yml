@@ -1,7 +1,3 @@
-git:
-  baseurl: https://github.com
-  prefix: QubesOS/qubes-
-
 include:
  - example-configs/qubes-os-r4.2.yml
 
