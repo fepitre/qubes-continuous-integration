@@ -46,6 +46,12 @@ distributions:
   - debian-12-minimal:
       dist: bookworm
       flavor: minimal
+  - debian-12-xfce:
+      dist: bookworm
+      flavor: xfce
+      options:
+        - standard
+        - firmware
 
 executor:
   type: docker
