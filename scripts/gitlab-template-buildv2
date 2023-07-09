@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -ex
+
+# Script is assumed in qubes-builderv2 root directory
+builder_dir="$(dirname "$0")"
+
+template="$1"
+
+if [ -z "$template" ]; then
+    echo "Please provide template (e.g. fedora-42)."
+    exit 1
+fi
+
+# Go to builder root directory
+cd "$builder_dir"
+
+# Run all stages
+./qb -t "${template}" template all
+
+mkdir -p artifacts/repository
+find artifacts/repository -type f -ls -exec sha1sum {} +

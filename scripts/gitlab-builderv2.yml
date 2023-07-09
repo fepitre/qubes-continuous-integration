@@ -26,11 +26,22 @@ distributions:
   - vm-focal
   - vm-jammy
 
-#executor:
-#  type: local
-#  options:
-#    user: "gitlab-runner"
-#    group: "gitlab-runner"
++templates:
+  - fedora-38:
+      dist: fc38
+      options:
+        - selinux
+  - fedora-38-minimal:
+      dist: fc38
+      flavor: minimal
+  - debian-12:
+      dist: bookworm
+      options:
+        - standard
+        - firmware
+  - debian-12-minimal:
+      dist: bookworm
+      flavor: minimal
 
 executor:
   type: docker
