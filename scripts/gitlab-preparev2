@@ -39,7 +39,7 @@ if ! $submodule; then
 fi
 
 # Run fetch stage
-read -a -r qb_opts <<< "${qb_opts}"
+read -r -a qb_opts <<< "${qb_opts}"
 ./qb "${qb_opts[@]}" -c "$component_name" package fetch
 
 if $submodule; then
