@@ -52,6 +52,12 @@ distributions:
       options:
         - standard
         - firmware
+  - centos-stream-8:
+      dist: centos-stream8
+  - centos-stream-9:
+      dist: centos-stream9
+  - centos-stream-10:
+      dist: centos-stream10
 
 executor:
   type: docker
