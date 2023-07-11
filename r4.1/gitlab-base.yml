@@ -1,5 +1,6 @@
 variables:
   BACKEND_VMM: "xen"
+  RELEASE: "4.1"
 
 workflow:
   rules:

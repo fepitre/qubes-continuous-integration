@@ -1,5 +1,2 @@
 include:
   - '/r4.1/gitlab-vm-gentoo-build.yml'
-
-variables:
-  RELEASE: "4.1"
