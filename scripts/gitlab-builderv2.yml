@@ -46,6 +46,8 @@ distributions:
   - debian-12-minimal:
       dist: bookworm
       flavor: minimal
+      options:
+      - no-recommends
   - debian-12-xfce:
       dist: bookworm
       flavor: xfce
