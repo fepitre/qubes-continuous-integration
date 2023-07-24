@@ -41,7 +41,7 @@ distributions:
   - debian-12:
       dist: bookworm
       options:
-        - standard
+        - gnome
         - firmware
   - debian-12-minimal:
       dist: bookworm
