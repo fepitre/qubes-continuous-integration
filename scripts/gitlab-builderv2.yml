@@ -60,6 +60,8 @@ distributions:
       dist: centos-stream9
   - centos-stream-10:
       dist: centos-stream10
+  - archlinux:
+      dist: archlinux
 
 executor:
   type: docker
