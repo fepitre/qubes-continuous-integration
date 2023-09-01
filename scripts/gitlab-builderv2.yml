@@ -18,6 +18,10 @@ use-qubes-repo:
   version: 4.2
   testing: true
 
++components:
+  - builder-archlinux:
+      packages: false
+
 distributions:
   - host-fc32
   - host-fc37
