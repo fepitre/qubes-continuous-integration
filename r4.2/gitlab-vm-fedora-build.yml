@@ -7,3 +7,8 @@ r4.2:build:vm-fc38:
   extends: .r4.2_components_build
   needs:
     - r4.2:prep:sources
+
+r4.2:build:vm-fc39:
+  extends: .r4.2_components_build
+  needs:
+    - r4.2:prep:sources

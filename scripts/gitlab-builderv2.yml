@@ -29,6 +29,7 @@ distributions:
   - vm-bookworm
   - vm-fc37
   - vm-fc38
+  - vm-fc39
   - vm-centos-stream8
   - vm-archlinux
   - vm-focal
