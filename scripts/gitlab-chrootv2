@@ -10,7 +10,7 @@ if [ -z "$CI_PROJECT_DIR" ]; then
 fi
 
 if ! [ -e "$CI_PROJECT_DIR"/chroot.tar.xz ]; then
-    curl -L "https://gitlab.com/api/v4/projects/QubesOS/qubes-builderv2/jobs/artifacts/main/raw/artifacts.tar.xz?job=cache-${dist}" -o "$CI_PROJECT_DIR"/artifacts.tar.xz
+    curl -L "https://gitlab.com/api/v4/projects/QubesOS%2Fqubes-builderv2/jobs/artifacts/main/raw/artifacts.tar.xz?job=cache-${dist}" -o "$CI_PROJECT_DIR"/artifacts.tar.xz
 fi
 
 tar xf "$CI_PROJECT_DIR"/artifacts.tar.xz
