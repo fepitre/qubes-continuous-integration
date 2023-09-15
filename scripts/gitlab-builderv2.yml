@@ -43,6 +43,13 @@ distributions:
   - fedora-38-minimal:
       dist: fc38
       flavor: minimal
+  - fedora-39:
+      dist: fc39
+      options:
+        - selinux
+  - fedora-39-minimal:
+      dist: fc39
+      flavor: minimal
   - debian-12:
       dist: bookworm
       options:
