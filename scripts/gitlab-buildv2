@@ -40,6 +40,7 @@ if grep -q '^components:$' builder.yml; then
     ./qb "${qb_opts[@]}" -d "${dist}" package all
 else
     # Run all stages
+    qb_opts+=( -o +components+"$component_name" )
     ./qb "${qb_opts[@]}" -c "$component_name" -d "${dist}" package all
 fi
 

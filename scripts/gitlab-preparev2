@@ -40,6 +40,7 @@ fi
 
 # Run fetch stage
 read -r -a qb_opts <<< "${qb_opts}"
+qb_opts+=( -o +components+"$component_name" )
 ./qb "${qb_opts[@]}" -c "$component_name" package fetch
 
 if $submodule; then
