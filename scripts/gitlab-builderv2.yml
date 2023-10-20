@@ -21,6 +21,7 @@ use-qubes-repo:
 +components:
   - builder-archlinux:
       packages: false
+      branch: main
 
 distributions:
   - host-fc32
