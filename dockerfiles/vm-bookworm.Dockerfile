@@ -1,6 +1,6 @@
 from debian:bookworm
 
-RUN apt -y update && apt -y install sudo ca-certificates wget gnupg && apt -y clean all
+RUN apt -y update && apt -y install sudo ca-certificates wget gnupg reprotest && apt -y clean all
 
 RUN printf '\
 deb [arch=amd64] https://deb.qubes-os.org/r4.2/vm bookworm main\n\

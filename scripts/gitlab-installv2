@@ -13,13 +13,14 @@ init_logging(level="DEBUG")
 class CIError(Exception):
     pass
 
+
 def package_name(file_name):
-    if file_name.endswith('.deb'):
-        return file_name.split('_', 1)[0]
-    elif file_name.endswith('.rpm'):
-        return '-'.join(file_name.split('-')[:-2])
-    elif 'pkg.tar' in file_name:
-        return '-'.join(file_name.split('-')[:-3])
+    if file_name.endswith(".deb"):
+        return file_name.split("_", 1)[0]
+    elif file_name.endswith(".rpm"):
+        return "-".join(file_name.split("-")[:-2])
+    elif "pkg.tar" in file_name:
+        return "-".join(file_name.split("-")[:-3])
     else:
         return file_name
 
@@ -27,10 +28,7 @@ def package_name(file_name):
 def main(qubes_distribution: QubesDistribution, repository: Path):
     container_image = qubes_distribution.distribution
     environment = {}
-    if qubes_distribution.fullname == "fedora":
-        pkgext = "rpm"
-        run_cmd = "dnf -y update && dnf -y --allowerasing install"
-    elif qubes_distribution.fullname == "centos-stream":
+    if qubes_distribution.fullname in ("fedora", "centos-stream"):
         pkgext = "rpm"
         run_cmd = "dnf -y update && dnf -y --allowerasing install"
     elif qubes_distribution.fullname in ("debian", "ubuntu"):
@@ -66,12 +64,13 @@ def main(qubes_distribution: QubesDistribution, repository: Path):
     packages = [
         pkg
         for pkg in repository.rglob(f"*.{pkgext}")
-        if package_name(pkg.name) not in excluded_packages and not pkg.name.endswith(".src.rpm")
+        if package_name(pkg.name) not in excluded_packages
+        and not pkg.name.endswith(".src.rpm")
     ]
 
     copy_in = []
     for pkg in packages:
-        copy_in.append((pkg, PurePath(f"/repository")))
+        copy_in.append((pkg, PurePath("/repository")))
 
     if not packages:
         print("Nothing to install!")

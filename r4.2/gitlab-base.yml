@@ -97,6 +97,28 @@ stages:
     - sudo rm -rf $CI_PROJECT_DIR/artifacts
     - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
 
+.r4.2_components_repro:
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - artifacts/logs
+      - artifacts/reprotest
+  stage: repro
+  before_script:
+    # Get artifacts from build jobs
+    - tar xf $CI_PROJECT_DIR/qubes-builder.tar.xz -C ~/
+    - mv $CI_PROJECT_DIR/artifacts/repository ~/qubes-builder/artifacts/
+    # Provide 'qubesbuilder'
+    - export "PYTHONPATH=$PYTHONPATH:$HOME/qubes-builder"
+    - cd ~/qubes-builder/dockerfiles
+    - docker build -t "${DIST-${CI_JOB_NAME#r4.2:repro:}}" -f "${DIST-${CI_JOB_NAME#r4.2:repro:}}".Dockerfile .
+  script:
+    - python3 ~/qubes-builder/gitlab-reprotestv2 ~/qubes-builder/artifacts/repository ~/qubes-builder/artifacts/reprotest "${DIST-${CI_JOB_NAME#r4.2:repro:}}"
+  after_script:
+    - sudo rm -rf $CI_PROJECT_DIR/artifacts
+    - mv ~/qubes-builder/artifacts $CI_PROJECT_DIR/
+
 .r4.2_templates_build:
   artifacts:
     expire_in: 1 day

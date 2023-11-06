@@ -1,0 +1,110 @@
+#!/usr/bin/python3
+import json
+import sys
+from pathlib import Path, PurePath
+from qubesbuilder.distribution import QubesDistribution
+from qubesbuilder.executors.container import ContainerExecutor, ExecutorError
+from qubesbuilder.log import init_logging, get_logger
+
+init_logging(level="DEBUG")
+
+logger = get_logger("reprotestv2")
+
+
+class CIError(Exception):
+    pass
+
+
+def get_run_cmd(qubes_distribution: QubesDistribution, package, store_dir):
+    if qubes_distribution.fullname in ("fedora", "centos-stream"):
+        run_cmd = f"reprotest --store-dir {store_dir} --no-clean-on-error --vary=-domain_host,-kernel,-build_path --testbed-build-pre 'dnf update; dnf builddep -y --allowerasing {package}' {package}"
+    elif qubes_distribution.fullname in ("debian", "ubuntu"):
+        run_cmd = f"reprotest --store-dir {store_dir} --no-clean-on-error --vary=-domain_host --testbed-build-pre 'apt-get update; apt-get -y --no-install-recommends build-dep {package}' {package}"
+    else:
+        raise CIError("Unsupported distribution!")
+    return run_cmd
+
+
+def get_prefix(qubes_distribution: QubesDistribution, package):
+    if qubes_distribution.fullname in ("fedora", "centos-stream"):
+        prefix = package.name.replace(".src.rpm", "")
+    elif qubes_distribution.fullname in ("debian", "ubuntu"):
+        prefix = package.name.replace(".dsc", "")
+    else:
+        raise CIError("Unsupported distribution!")
+    return prefix
+
+
+def main(qubes_distribution: QubesDistribution, repository: Path, artifacts: Path):
+    container_image = qubes_distribution.distribution
+    environment = {}
+    dependencies = []
+    if qubes_distribution.fullname in ("fedora", "centos-stream"):
+        packages = (repository / dist.distribution).rglob("*.src.rpm")
+    elif qubes_distribution.fullname in ("debian", "ubuntu"):
+        environment.update(
+            {
+                "DEBIAN_FRONTEND": "noninteractive",
+                "DEBIAN_PRIORITY": "critical",
+                "DEBCONF_NOWARNINGS": "yes",
+            }
+        )
+        packages = (repository / dist.distribution).rglob("*.dsc")
+        dependencies = (repository / dist.distribution).rglob("*.tar.*")
+    else:
+        raise CIError("Unsupported distribution!")
+
+    if not packages:
+        logger.debug("Nothing to reprotest!")
+        return
+
+    results = {}
+
+    (artifacts / dist.distribution).mkdir(exist_ok=True, parents=True)
+
+    for package in packages:
+        package_name = get_prefix(qubes_distribution, package)
+
+        store_dir = PurePath(f"/artifacts/{dist.distribution}/{package_name}")
+
+        copy_in = [(package, PurePath("/repository"))] + [
+            (dep, PurePath("/repository")) for dep in dependencies
+        ]
+
+        copy_out = [(store_dir, artifacts / dist.distribution)]
+
+        cmd = [
+            get_run_cmd(qubes_distribution, f"/repository/{package.name}", store_dir)
+        ]
+
+        try:
+            executor = ContainerExecutor("docker", container_image)
+            executor.run(
+                cmd,
+                copy_in=copy_in,
+                copy_out=copy_out,
+                override_container_cmd=True,
+                environment=environment,
+            )
+            results[package_name] = True
+        except ExecutorError:
+            results[package_name] = False
+            pass
+
+    (artifacts / dist.distribution / "results.json").write_text(
+        json.dumps(results, indent=4)
+    )
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        logger("usage: repository_dir artifacts_dir qubes_distribution")
+        sys.exit(1)
+    try:
+        dist = QubesDistribution(sys.argv[3])
+        repository_path = Path(sys.argv[1]).expanduser().resolve()
+        artifacts_path = Path(sys.argv[2]).expanduser().resolve()
+        main(dist, repository_path, artifacts_path)
+    except Exception as e:
+        logger(str(e))
+        sys.exit(1)
